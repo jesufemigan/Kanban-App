@@ -1,0 +1,36 @@
+@use 'sass:math';
+@use '../globals/' as g;
+
+@function rem($pixel) {
+  @if math.is-unitless($pixel) {
+    @return math.div($pixel, 16) + rem;
+  }
+  @else {
+    @error "Don't use units when using rem() function: only number"
+  }
+};
+
+@function em($pixel) {
+  @if math.is-unitless($pixel) {
+    @return math.div($pixel, 16) + em;
+  }
+  @else {
+    @error "Don't use units when using em() function: only number"
+  }
+};
+
+.dark {
+  @each $name, $color in g.$dark{
+    --color-#{""+$name} : #{$color};
+  }
+};
+
+.light {
+  @each $name, $color in g.$light{
+    --color-#{""+$name} : #{$color};
+  }
+};
+
+@function color($getColor){
+  @return var(--color-#{$getColor})
+};

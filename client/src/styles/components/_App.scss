@@ -1,0 +1,11 @@
+@use '../utils/' as u;
+
+.App {
+  @include u.breakpoint(medium) {
+    display: grid;
+    grid-template-areas: 
+                "sidebar nav"
+                "sidebar main";
+    grid-template-columns: u.rem(340) auto;
+  }
+}

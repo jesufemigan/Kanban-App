@@ -1,0 +1,23 @@
+@use './fonts' as f;
+
+html {
+  box-sizing: border-box;
+  font-size: 100%;
+}
+
+*,
+*::after,
+*::before {
+  box-sizing: inherit;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: f.$font;
+}
+
+button {
+  font-family: inherit;
+  border: none;
+}

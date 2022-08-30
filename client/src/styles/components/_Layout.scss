@@ -1,0 +1,68 @@
+@use '../globals' as g;
+@use '../utils/' as u;
+
+nav {
+  display: flex;
+  gap: u.rem(30);
+  padding: u.rem(30);
+  align-items: center;
+  grid-area: nav;
+  border-bottom: u.rem(1) solid u.color(borderLine);
+  @include u.breakpoint(medium) {
+    .mobileLogo {
+      display: none;
+    }
+  }
+}
+
+.boardTitle h1{
+  font-size: u.rem(20);
+}
+
+.actionHeader {
+  display: flex;
+  align-items: center;
+  gap: u.rem(20);
+  margin-left: auto;
+
+  button {
+    padding: u.rem(5) u.rem(15);
+    border-radius: u.rem(20);
+    background-color: g.$darkBlue;
+
+    span {
+      #addNew {
+        display: none;
+      }
+
+      @include u.breakpoint(medium) {
+        
+        #addNew {
+          display: block;
+        }
+        display: flex;
+        align-items: center;
+      }
+    }
+  }
+}
+
+.sideBarPos {
+  display: flex;
+  justify-content: center;
+  right: 0;
+  left: 0;
+  position: absolute;
+  top: 10%;
+
+  @include u.breakpoint(medium) {
+    position: fixed;
+    display: block;
+    width: fit-content;
+    top: 0;
+  }
+}
+
+main {
+  grid-area: main;
+}
