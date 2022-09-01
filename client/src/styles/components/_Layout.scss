@@ -1,16 +1,35 @@
 @use '../globals' as g;
 @use '../utils/' as u;
 
-nav {
+header {
   display: flex;
-  gap: u.rem(30);
-  padding: u.rem(30);
+  gap: u.rem(20);
+  padding: 0 u.rem(10);
   align-items: center;
-  grid-area: nav;
   border-bottom: u.rem(1) solid u.color(borderLine);
+  height: u.rem(110);
+  width: 100%;
+
+  #desktopLogo {
+    display: none;
+  }
+
+  .logo {
+    padding: u.rem(30) 0;
+  }
   @include u.breakpoint(medium) {
-    .mobileLogo {
+    #mobileLogo {
       display: none;
+    }
+
+    #desktopLogo {
+      display: block;
+      width: u.rem(180);
+    }
+    .logo {
+      border-right: 1px solid u.color(borderLine);
+      padding: u.rem(30);
+      padding-right: u.rem(119);
     }
   }
 }
@@ -44,25 +63,51 @@ nav {
         align-items: center;
       }
     }
+    &+img {
+      padding-right: u.rem(30);
+    }
+  }
+}
+
+main {
+  height: calc(100vh - u.rem(100));
+  width: 100%;
+  
+  
+  position: relative;
+  background-color: u.color(bg);
+  overflow: auto;
+  
+  @include u.breakpoint(medium) {
+    display: flex;
+    gap: u.rem(40);
+
   }
 }
 
 .sideBarPos {
   display: flex;
   justify-content: center;
-  right: 0;
   left: 0;
+  right: 0;
   position: absolute;
-  top: 10%;
+  top: -2%;
 
   @include u.breakpoint(medium) {
-    position: fixed;
-    display: block;
     width: fit-content;
-    top: 0;
+    position: fixed;
+    z-index: 1;
+    top: auto;
   }
 }
 
-main {
-  grid-area: main;
+.column__container {
+  display: flex;
+  gap: u.rem(40);
+  position: absolute;
+  height: 100%;
+  min-width: 100%;
+  left: u.rem(350);
+  padding: u.rem(30);
 }
+

@@ -1,0 +1,58 @@
+@use '../utils/' as u;
+@use '../globals/' as g;
+
+
+.column {
+  width: u.rem(300);
+  span {
+    display: flex;
+    align-items: center;
+    gap: u.rem(15);
+    margin-bottom: u.rem(20);
+  }
+  &__color {
+    width: u.rem(15);
+    height: u.rem(15);
+    border-radius: 50%;
+  }
+
+  &__tasks {
+    display: flex;
+    flex-direction: column;
+    gap: u.rem(20);
+  }
+
+  &__title{
+    text-transform: uppercase;
+    letter-spacing: u.rem(1.8);
+  }
+}
+
+.column__tasks.empty {
+  height: 94%;
+  border: 1px dashed g.$mediumGrayOpacity;
+  border-width: u.rem(2);
+  border-radius: u.rem(10);
+}
+
+.column__new {
+  width: u.rem(300);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 90%;
+  margin-top: u.rem(42);
+  border-radius: u.rem(6);
+
+  background: g.$mediumGrayGradient;
+
+  span {
+    display: flex;
+    align-items: center;
+    gap: u.rem(8);
+
+    color: u.color(subTitle);
+  }
+  
+
+}

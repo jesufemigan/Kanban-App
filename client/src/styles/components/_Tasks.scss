@@ -1,0 +1,13 @@
+@use '../utils/' as u;
+@use '../globals/' as g;
+
+.task {
+  background-color: u.color(main);
+  padding: u.rem(20) u.rem(25);
+  border-radius: u.rem(10);
+  box-shadow: 0 u.rem(4) u.rem(6) g.$cardShadow;
+
+  h3 {
+    margin-bottom: u.rem(20);
+  }
+}

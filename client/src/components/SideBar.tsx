@@ -1,5 +1,4 @@
-import desktopLogoLight from '../assets/logo-light.svg'
-import desktopLogoDark from '../assets/logo-dark.svg';
+
 import iconBoard from '../assets/icon-board.svg';
 import iconAddTask from '../assets/icon-add-task-mobile.svg';
 import iconDarkTheme from '../assets/icon-dark-theme.svg'
@@ -9,9 +8,6 @@ import iconHide from '../assets/icon-hide-sidebar.svg';
 const SideBar = () => {
   return (
     <div className="sideBar">
-      <div className='desktopLogo'>
-        <img src={desktopLogoLight} alt="" />
-      </div>
       <div className="allBoards">
         <p>All Boards (2)</p>
         <div className="eachBoard">

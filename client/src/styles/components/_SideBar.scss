@@ -8,15 +8,14 @@
   border-radius: u.rem(10);
   background-color: u.color(main);
   width: u.rem(300);
-  height: u.rem(300);
-  grid-area: sidebar;
+  height: fit-content;
+  padding-bottom: u.rem(40);
 
   @include u.breakpoint(medium) {
     border-radius: 0;
-    height: 100vh;
+    height: calc(100vh - u.rem(100));
     border-right: u.rem(1) solid u.color(borderLine);
     width: u.rem(340);
-
   }
 
 
@@ -43,9 +42,7 @@
     border-bottom: u.rem(1) solid u.color(borderLine);
   }
 }
-.allBoards {
 
-}
 .eachBoard {
   span {
     display: flex;
@@ -59,10 +56,7 @@
   display: flex;
   flex-direction: column;
   gap: u.rem(10);
-
-  @include u.breakpoint(medium) {
-    padding-right: u.rem(20);
-  }
+  padding-right: u.rem(20);
 
   .active {
     background-color: g.$darkBlue;
@@ -75,6 +69,7 @@
   margin-top: u.rem(20);
   padding-left: u.rem(20);
   color: g.$darkBlue;
+  margin-bottom: u.rem(60);
 
   span {
     display: inline-flex;
