@@ -8,8 +8,12 @@ import verticalEllipsis from '../assets/icon-vertical-ellipsis.svg';
 import iconAdd from '../assets/icon-add-task-mobile.svg';
 import Column from "./Column";
 
+import { useDispatch } from 'react-redux'
+import { openModal } from "../features/modal/modalSlice";
+
 const Layout = () => {
   const tasks: string[] = []
+  const dispatch = useDispatch()
   return (
     <>
       <header>
@@ -21,7 +25,7 @@ const Layout = () => {
           <h1>Platform Launch</h1>
         </div>
         <div className="actionHeader">
-          <button>
+          <button onClick={() => dispatch(openModal("AddTask"))}>
             <span>
               <img src={iconAddTask} alt="" />
               <p id="addNew">Add new task</p>

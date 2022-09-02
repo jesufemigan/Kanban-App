@@ -1,0 +1,39 @@
+@use '../utils/' as u;
+@use '../globals/' as g;
+
+.input {
+  display: flex;
+  flex-direction: column;
+  gap: u.rem(10);
+
+  span {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: u.rem(7);
+  }
+}
+
+input, textarea, select {
+  width: 100%;
+  padding: u.rem(8) u.rem(16);
+  border-radius: u.rem(5);
+  border: u.rem(2) solid g.$mediumGrayOpacity;
+  outline: g.$darkBlue;
+
+  &:focus {
+    border: u.rem(2) solid g.$darkBlue;
+    
+  }
+}
+
+textarea {
+  resize: none;
+  height: u.rem(100);
+}
+
+.select {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}

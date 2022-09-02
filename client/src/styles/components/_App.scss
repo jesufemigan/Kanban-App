@@ -1,6 +1,29 @@
+@use '../globals/' as g;
+@use '../utils/' as u;
+
 .App {
   display: flex;
   flex-direction: column;
   height: 100vh;
-  // overflow: hidden;
+  background-color: u.color(main);
+}
+
+.btn {
+  border-radius: u.rem(20);
+  padding: u.rem(8) u.rem(16);
+}
+
+.primary-btn {
+  background-color: u.color(addButton);
+  color: g.$darkBlue;
+}
+
+.secondary-btn {
+  background-color: g.$darkBlue;
+  color: g.$white;
+}
+
+.danger-btn {
+  background-color: g.$red;
+  color: g.$white;
 }

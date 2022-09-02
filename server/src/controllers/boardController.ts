@@ -4,13 +4,14 @@ import Board from '../models/boardModel';
 
 
 export const getAllBoard: RequestHandler = expressAsyncHandler(async (req: Request, res: Response) => {
-  const board = await Board.find()
-  res.json(board)
+  const boards = await Board.find({id: req.userId})
+  res.status(200).json(boards)
 })
 
 export const addNewBoard: RequestHandler = expressAsyncHandler(async (req: Request, res: Response) => {
   const { title, columns } = req.body
   const newBoard = new Board({
+    userId: req.userId,
     title,
     columns
   })

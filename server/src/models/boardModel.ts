@@ -22,6 +22,7 @@ interface IColumn {
 
 interface IBoard {
   _id: string
+  userId: mongoose.Types.ObjectId
   title: string
   columns: IColumn[]
 }
@@ -52,7 +53,11 @@ const columnSchema = new Schema<IColumn>({
   },
 })
 
-const boardSchema = new mongoose.Schema<IBoard>({
+const boardSchema = new Schema<IBoard>({
+  userId: {
+    type: Schema.Types.ObjectId,
+    required: true
+  },
   title: {
     type: String,
     required: true

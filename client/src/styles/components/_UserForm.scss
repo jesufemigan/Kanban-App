@@ -1,0 +1,41 @@
+@use '../globals/' as g;
+@use '../utils/' as u;
+
+.userForm {
+  width: 100%;
+  height: 100%;
+  background-color: u.color(bg);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  
+  &__content {
+    width: 80%;
+    
+    @include u.breakpoint(medium) {
+      width: u.rem(500);
+    }
+  }
+  &__logo {
+    margin: 0 auto;
+    width: 10%;
+    margin-bottom: u.rem(30);
+  }
+  
+  form {
+    border-radius: u.rem(10);
+    background-color: u.color(main);
+    padding: u.rem(40);
+    display: flex;
+    flex-direction: column;
+    gap: u.rem(20);
+
+    button {
+      width: 100%;
+    }
+
+    strong {
+      color: g.$darkBlue;
+    }
+  }
+}
