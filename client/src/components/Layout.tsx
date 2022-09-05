@@ -10,10 +10,37 @@ import Column from "./Column";
 
 import { useDispatch } from 'react-redux'
 import { openModal } from "../features/modal/modalSlice";
+import { useEffect, useRef, useState } from "react";
+import { useAppSelector } from "../app/hooks";
 
 const Layout = () => {
   const tasks: string[] = []
   const dispatch = useDispatch()
+
+  const [isFocused, setIsFocused] = useState(false)
+  const boardActionRef = useRef<any>(null)
+
+  const { boards } = useAppSelector(state => state.board)
+  const { id } = useAppSelector(state => state.currentBoardId)
+
+  useEffect(() => {
+    function handleClickOutside(e: any) {
+      if (boardActionRef.current && !boardActionRef.current.contains(e.target)) {
+        setIsFocused(false)
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside)
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside)
+    }
+  }, [boardActionRef])
+
+  const showDropDown = () => {
+    setIsFocused(prev => !prev)
+  }
+
+  const currentBoard = boards.find(board => board._id === id)
   return (
     <>
       <header>
@@ -31,7 +58,17 @@ const Layout = () => {
               <p id="addNew">Add new task</p>
             </span>
           </button>
-          <img src={verticalEllipsis} alt="" />
+          <div className="boardActions" >
+            <img src={verticalEllipsis} alt="" onClick={() => showDropDown()}/>
+            <div className={`boardActions__child ${isFocused ? 'show': ''}`} ref={boardActionRef}>
+              <p 
+              onClick={() => {
+                dispatch(openModal("EditBoard"))
+                setIsFocused(false)
+                }}>Edit Board</p>
+              <p>Delete Board</p>
+            </div>
+          </div>
         </div>
       </header>
       <main className="overflow">
@@ -39,8 +76,9 @@ const Layout = () => {
           <SideBar />
         </div>
         <div className="column__container">
-          <Column title="Project To" tasks={tasks}/>
-          <Column title="Project To" tasks={tasks}/>
+          {currentBoard?.columns.map(column => (
+            <Column title={column.title} tasks={column.tasks}/>
+          ))}
           <div className="column__new">
             <span>
               <img src={iconAdd} alt="" />

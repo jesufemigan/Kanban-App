@@ -4,31 +4,42 @@ import iconAddTask from '../assets/icon-add-task-mobile.svg';
 import iconDarkTheme from '../assets/icon-dark-theme.svg'
 import iconLightTheme from '../assets/icon-light-theme.svg';
 import iconHide from '../assets/icon-hide-sidebar.svg';
+import boardService from '../features/board/boardService';
+
+import { useAppSelector } from '../app/hooks';
+import { useDispatch } from 'react-redux';
+import { openModal } from '../features/modal/modalSlice';
+import { useEffect } from 'react'
+import { changeBoardId } from '../features/currentBoardReducer';
 
 const SideBar = () => {
+  const { boards } = useAppSelector(state => state.board)
+
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+    if (boards.length > 0) {
+      dispatch(changeBoardId(boards[0]._id))
+    }
+  }, [dispatch, boards])
+  
   return (
     <div className="sideBar">
       <div className="allBoards">
         <p>All Boards (2)</p>
         <div className="eachBoard">
-          <span className='active'>
-          <img src={iconBoard} alt="" />
-          <p>Platform Launch</p>
-          </span>
-          <span>
-          <img src={iconBoard} alt="" />
-          <p>Marketing Plan</p>
-          </span>
-          <span>
-          <img src={iconBoard} alt="" />
-          <p>Roadmap</p>
-          </span>
+          {boards.map(board => (
+            <span className='active' key={board.title}>
+              <img src={iconBoard} alt="" />
+              <p>{board.title}</p>
+            </span>
+          ))}
         </div>
         <div className="newBoard">
           <img src={iconBoard} alt="" />
           <span>
             <img src={iconAddTask} alt="" />
-            <p>Create New Board</p>
+            <p onClick={() => dispatch(openModal("NewBoard"))}>Create New Board</p>
           </span>
         </div>
       </div>

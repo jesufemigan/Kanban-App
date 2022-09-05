@@ -5,7 +5,7 @@ import { Link } from "react-router-dom"
 import { ChangeEvent, FormEvent } from "react"
 
 import { useState } from "react"
-import { useDispatch } from "react-redux"
+import { useAppDispatch } from "../app/hooks"
 import { login, register } from "../features/auth/authSlice"
 import { useNavigate } from "react-router-dom"
 
@@ -25,7 +25,7 @@ const UserForm:React.FC<{name:string,signUp?:boolean}> = ({name, signUp}) => {
     ))
   }
 
-  const dispatch = useDispatch<any>()
+  const dispatch = useAppDispatch()
   const navigate = useNavigate()
 
   const handleSubmit = (e: FormEvent) => {

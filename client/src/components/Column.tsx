@@ -2,7 +2,21 @@ import Task from "./Task"
 
 interface IColumn {
   title: string
-  tasks: string[]
+  tasks: ITask[]
+}
+
+interface ISubtask {
+  _id: string
+  title: string
+  isCompleted: boolean
+}
+
+interface ITask {
+  _id?: string
+  title: string
+  description: string[]
+  status: string
+  subtasks: ISubtask[]
 }
 const Column: React.FC<IColumn> = ({ title, tasks }) => {
   return (
@@ -12,8 +26,9 @@ const Column: React.FC<IColumn> = ({ title, tasks }) => {
         <p className="column__title">{`${title}${`(${tasks.length})`}`}</p>
       </span>
       <div className={`${tasks.length === 0 ? 'empty' : ''} column__tasks`}>
-        <Task title="Hello World" completedTask={0} allTasks={4}/>
-        
+        {tasks.map(task => (
+          <Task title={task.title} completedTask={0} allTasks={tasks.length}/> 
+        ))}
       </div>
 
     </div>

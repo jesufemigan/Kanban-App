@@ -7,27 +7,28 @@ interface InputProps {
   name: string
   inputArray?: any
   // onChange?: ChangeEventHandler<HTMLInputElement>
-  onChange?: (e: ChangeEvent<HTMLInputElement>) => void
+  onChange?: (e: ChangeEvent<HTMLInputElement>, id?: any) => void
   handleChange?: ChangeEventHandler<HTMLInputElement>
+  handleRemove?: any
 }
 
-const Inputs:React.FC<InputProps> = ({ type, name, inputArray, onChange }) => {
-  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    if (onChange) onChange(e)
-  }
+const Inputs:React.FC<InputProps> = ({ type, name, inputArray, onChange, handleRemove }) => {
+  const handleChange = (e: ChangeEvent<HTMLInputElement>, id?: any) => {
+    if (onChange) onChange(e, id)
+  } 
   return (
     <div className="input">
       <label htmlFor={name}>{name}</label>
       {inputArray ? (
-        inputArray.map((obj: string | number | readonly string[] | undefined, index: Key | null | undefined) => (
-          <span>
-            <input type={type} key={index} name={name}/>
+        inputArray.map((obj: any, index:any) => (
+          <span key={obj.id}>
+            <input type={type} name={name} onChange={(e) => handleChange(e, obj.id)}/>
             {inputArray.length > 1 && (
-              <img src={deleteButton} alt="" />
+              <img src={deleteButton} alt="" onClick={() => handleRemove(obj.id)}/>
             )}
           </span>
         ))
-      ) : (
+      ): (
         <input type={type} onChange={(e) => handleChange(e)} name={name}/>
       )}
     </div>

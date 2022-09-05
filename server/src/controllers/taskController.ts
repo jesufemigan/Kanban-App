@@ -15,10 +15,10 @@ export const addTask = expressAsyncHandler(async (req: Request, res:Response) =>
   const column = board?.columns.find(column => column.title === status)
 
   column?.tasks.push({ title, description, subtasks, status })
-
-  const updatedBoard = await board.save()
-
-  res.status(200).json(updatedBoard)
+  // board.save()
+  await board.save()
+  const allBoard = await Board.find({id: req.userId})
+  res.status(200).json(allBoard)
 })
 
 export const editTask = expressAsyncHandler(async (req:Request, res:Response) => {
