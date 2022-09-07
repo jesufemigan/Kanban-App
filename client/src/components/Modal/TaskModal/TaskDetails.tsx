@@ -3,6 +3,7 @@ import ellipsis from '../../../assets/icon-vertical-ellipsis.svg'
 import { useAppSelector, useAppDispatch } from "../../../app/hooks"
 import { openModal } from "../../../features/modal/modalSlice"
 import { useState } from 'react'
+import { updateSubTask } from "../../../features/board/boardSlice"
 
 const TaskDetails:React.FC<{task:any}> = ({ task }) => {
   const { boardId } = useAppSelector(state => state.ids)
@@ -13,6 +14,16 @@ const TaskDetails:React.FC<{task:any}> = ({ task }) => {
   const dispatch = useAppDispatch()
 
   const currentBoard = boards.find(board => board._id === boardId)
+
+  const handleSubTaskChange = (id:any) => {
+    const details = {
+      status: task.status,
+      taskId: task._id,
+      subId: id
+    }
+
+    dispatch(updateSubTask(details))
+  }
   return (
     <Modal>
       <div className="taskDetails">
@@ -33,7 +44,7 @@ const TaskDetails:React.FC<{task:any}> = ({ task }) => {
             <div key={sub._id} className="allSubtasks__each">
               <label className="checkbox">
                 {sub.title}
-                <input type="checkbox" />
+                <input type="checkbox" checked={sub.isCompleted} onChange={() => handleSubTaskChange(sub._id)}/>
                 <span className="checkmark"></span>
               </label>
             </div>

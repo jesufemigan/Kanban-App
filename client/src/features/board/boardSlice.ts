@@ -106,6 +106,17 @@ export const editTask = createAsyncThunk('board/task/edit', async (updatedTaskDe
   }
 })
 
+export const updateSubTask = createAsyncThunk('board/task/subtask/update', async (details:any, thunkAPI) => {
+  try {
+    const appState = thunkAPI.getState() as RootState
+    const token = appState.auth.user.token
+    const boardId = appState.ids.boardId
+    return await taskService.updateSubTask(token, boardId, details)
+  } catch (error:any) {
+    const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString()
+    return thunkAPI.rejectWithValue(message)
+  }
+})
 export const boardSlice = createSlice({
   name: 'board',
   initialState,
@@ -175,6 +186,19 @@ export const boardSlice = createSlice({
           state.boards = action.payload
         })
         .addCase(editTask.rejected, (state, action) => {
+          state.isLoading = false
+          state.isError = true
+          state.message = action.payload as string
+        })
+        .addCase(updateSubTask.pending, (state) => {
+          state.isLoading = true
+        })
+        .addCase(updateSubTask.fulfilled, (state, action) => {
+          state.isLoading = false
+          state.isSuccess = true
+          state.boards = action.payload
+        })
+        .addCase(updateSubTask.rejected, (state, action) => {
           state.isLoading = false
           state.isError = true
           state.message = action.payload as string

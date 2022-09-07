@@ -23,7 +23,7 @@ export const addTask = expressAsyncHandler(async (req: Request, res:Response) =>
 
 export const editTask = expressAsyncHandler(async (req:Request, res:Response) => {
   const { board_id } = req.params
-  const { column_id, task_id, title, description, status, subtasks } = req.body
+  const { task_id, title, description, status, subtasks } = req.body
 
   const board = await Board.findById(board_id)
 
@@ -40,6 +40,26 @@ export const editTask = expressAsyncHandler(async (req:Request, res:Response) =>
 
   await board.save()
   const allBoard = await Board.find({ id: req.userId })
+
+  res.status(200).json(allBoard)
+})
+
+export const updateSubTask: RequestHandler = expressAsyncHandler(async (req:Request, res:Response) => {
+  const { board_id } = req.params
+  const { status, taskId, subId } = req.body
+  const board = await Board.findById(board_id)
+
+  if (!board) {
+    throw new Error("Board does not exist")
+  }
+  
+  const subTaskToUpdate = board.columns.find(column => column.title === status)?.tasks.find(task => task._id?.toString() === taskId)?.subtasks.find(sub => sub._id.toString() === subId)
+  
+  subTaskToUpdate!.isCompleted = !subTaskToUpdate?.isCompleted
+
+  await board.save()
+
+  const allBoard = await Board.find({id: req.userId})
 
   res.status(200).json(allBoard)
 })
