@@ -21,7 +21,7 @@ const Layout = () => {
   const boardActionRef = useRef<any>(null)
 
   const { boards } = useAppSelector(state => state.board)
-  const { id } = useAppSelector(state => state.currentBoardId)
+  const { boardId } = useAppSelector(state => state.ids)
 
   useEffect(() => {
     function handleClickOutside(e: any) {
@@ -40,7 +40,7 @@ const Layout = () => {
     setIsFocused(prev => !prev)
   }
 
-  const currentBoard = boards.find(board => board._id === id)
+  const currentBoard = boards.find(board => board._id === boardId)
   return (
     <>
       <header>
@@ -49,7 +49,7 @@ const Layout = () => {
           <img src={desktopLogoLight} alt="" id="desktopLogo"/>
         </div>
         <div className="boardTitle">
-          <h1>Platform Launch</h1>
+          <h1>{currentBoard?.title}</h1>
         </div>
         <div className="actionHeader">
           <button onClick={() => dispatch(openModal("AddTask"))}>
@@ -77,7 +77,7 @@ const Layout = () => {
         </div>
         <div className="column__container">
           {currentBoard?.columns.map(column => (
-            <Column title={column.title} tasks={column.tasks}/>
+            <Column title={column.title} tasks={column!.tasks} key={column._id}/>
           ))}
           <div className="column__new">
             <span>

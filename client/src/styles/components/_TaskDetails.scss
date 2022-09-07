@@ -1,0 +1,133 @@
+@use '../utils/' as u;
+@use '../globals/' as g;
+
+.taskDetails {
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: u.rem(15);
+  }
+
+  &__description {
+    color: u.color(subTitle);
+    margin-bottom: u.rem(20);
+
+    & + p {
+      margin-bottom: u.rem(10);
+    }
+  }
+
+  .allSubtasks {
+    display: flex;
+    flex-direction: column;
+    gap: u.rem(10);
+    margin-bottom: u.rem(15);
+
+    &__each {
+      display: flex;
+      align-items: center;
+      gap: u.rem(10);
+      background-color: u.color(themeSwitchBox);
+      padding: u.rem(12);
+      border-radius: u.rem(8);
+
+      &:hover {
+        cursor: pointer;
+        background-color: g.$darkBlueOpacity;
+      }
+
+      .checkbox {
+        display: block;
+        position: relative;
+        padding-left: 35px;
+        cursor: pointer;
+        font-size: u.rem(12);
+        font-weight: 700;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+      }
+      
+      /* Hide the browser's default checkbox */
+      .checkbox input {
+        position: absolute;
+        opacity: 0;
+        cursor: pointer;
+        height: 0;
+        width: 0;
+      }
+      
+      /* Create a custom checkbox */
+      .checkmark {
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: u.rem(20);
+        width: u.rem(20);
+        background-color: u.color(main);
+        border-radius: u.rem(5);
+        border: u.rem(1) solid g.$mediumGrayOpacity;
+      }
+      
+      .checkbox:hover input ~ .checkmark {
+        background-color: u.color(main);
+      }
+      
+      /* When the checkbox is checked, add a blue background */
+      .checkbox input:checked ~ .checkmark {
+        background-color: g.$darkBlue;
+      }
+      
+      
+      .checkmark:after {
+        content: "";
+        position: absolute;
+        display: none;
+      }
+      
+      /* Show the checkmark when checked */
+      .checkbox input:checked ~ .checkmark:after {
+        display: block;
+      }
+      
+      /* Style the checkmark/indicator */
+      .checkbox .checkmark:after {
+        left: u.rem(7);
+        top: u.rem(3);
+        width: u.rem(5);
+        height: u.rem(10);
+        border: solid white;
+        border-width: 0 u.rem(3) u.rem(3) 0;
+        -webkit-transform: rotate(45deg);
+        -ms-transform: rotate(45deg);
+        transform: rotate(45deg);
+      }
+    }
+
+  }
+}
+
+.taskDetails__action {
+  &--container {
+    position: relative;
+  }
+  &--content {
+    position: absolute;
+    width: u.rem(180);
+    padding: u.rem(20);
+    background-color: u.color(main);
+    border-radius: u.rem(8);
+    z-index: 4;
+    top: u.rem(40);
+    left: u.rem(-80);
+    box-shadow: 0 0 u.rem(8) #364e7e1a;
+    border: u.rem(1) solid u.color(bg);
+    // right: 0;
+
+    &.cancel {
+      display: none;
+    }
+  }
+}

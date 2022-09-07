@@ -31,16 +31,17 @@ export const editTask = expressAsyncHandler(async (req:Request, res:Response) =>
     throw new Error("Board does not exist")
   }
 
-  const taskToUpdate = board.columns.find(column => column._id.toString() === column_id)!.tasks.find(task => task._id!.toString() === task_id)
+  const taskToUpdate = board.columns.find(column => column.title === status)!.tasks.find(task => task._id!.toString() === task_id)
 
   taskToUpdate!.title = title
   taskToUpdate!.description = description
   taskToUpdate!.status = status
   taskToUpdate!.subtasks = subtasks
 
-  const updatedBoard = await board.save()
+  await board.save()
+  const allBoard = await Board.find({ id: req.userId })
 
-  res.status(200).json(updatedBoard)
+  res.status(200).json(allBoard)
 })
 
 export const deleteTask: RequestHandler = expressAsyncHandler(async (req: Request, res:Response) => {
@@ -57,7 +58,8 @@ export const deleteTask: RequestHandler = expressAsyncHandler(async (req: Reques
 
   columnToUpdate!.tasks!.splice(taskIndex, 1)
 
-  const updatedBoard = await board.save()
+  await board.save()
+  const allBoard = await Board.find({id:req.userId})
 
-  res.status(200).json(updatedBoard)
+  res.status(200).json(allBoard)
 })

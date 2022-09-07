@@ -6,10 +6,11 @@ import DeleteBoard from "./BoardModal/DeleteBoard"
 import DeleteTask from "./TaskModal/DeleteTask"
 import TaskDetails from "./TaskModal/TaskDetails"
 
-import { useSelector } from 'react-redux'
+import { useAppSelector } from "../../app/hooks"
 
 const Index = () => {
-  const { modalType } = useSelector((state:any) => state.modal)
+  const { modalType } = useAppSelector(state => state.modal)
+  const { task } = useAppSelector(state => state.ids)
   
   return (
     <>
@@ -19,7 +20,7 @@ const Index = () => {
       {modalType === 'EditBoard' && <EditBoard />}
       {modalType === 'DeleteBoard' && <DeleteBoard />}
       {modalType === 'DeleteTask' && <DeleteTask />}
-      {/* {modalType === 'TaskDetails' && <TaskDetails />} */}
+      {modalType === 'TaskDetails' && <TaskDetails task={task}/>}
       
     </>
   )

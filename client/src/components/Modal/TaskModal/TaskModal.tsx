@@ -4,21 +4,21 @@ import Inputs from "../../Inputs";
 import { useState, useRef } from 'react'
 import { nanoid } from "@reduxjs/toolkit";
 
-import { addNewTask } from "../../../features/board/boardSlice";
+import { addNewTask, editTask } from "../../../features/board/boardSlice";
 import { useAppDispatch, useAppSelector } from "../../../app/hooks";
 
-const TaskModal:React.FC<{title:string, buttonName: string}> = ({ title, buttonName }) => {
-  const [taskName, setTaskName] = useState('')
-  const [description, setDescription] = useState('')
-  const [subTasks, setSubTasks] = useState([{
-    id: nanoid(),
+const TaskModal:React.FC<{title:string, buttonName: string, edit?: boolean}> = ({ title, buttonName, edit }) => {
+  const { boardId, task } = useAppSelector(state => state.ids)
+  const { boards } = useAppSelector(state => state.board)
+  const [taskName, setTaskName] = useState(edit ? task.title : '')
+  const [description, setDescription] = useState(edit ? task.description : '')
+  const [subTasks, setSubTasks] = useState(edit ? task.subtasks : [{
+    _id: nanoid(),
     title: ''
   }])
   const statusRef = useRef<HTMLSelectElement>(null)
-  const { boards } = useAppSelector(state => state.board)
-  const { id } = useAppSelector(state => state.currentBoardId)
 
-  const currentBoard = boards.find(board => board._id === id)
+  const currentBoard = boards.find(board => board._id === boardId)
   
   const handleNameChange = (e:any) => {
     setTaskName(e.target.value)
@@ -27,13 +27,13 @@ const TaskModal:React.FC<{title:string, buttonName: string}> = ({ title, buttonN
     setDescription(e.target.value)
   }
   const handleRemove = (id: any) => {
-    setSubTasks(prev => prev.filter(prev => prev.id !== id))
+    setSubTasks((prev:any) => prev.filter((prev:any) => prev._id !== id))
   }
   const handleOnChange = (e:any, id:any) => {
     
     const newName = e.target.value
-    setSubTasks(prev => prev.map(p => {
-      if (p.id === id) {
+    setSubTasks((prev:any) => prev.map((p:any) => {
+      if (p._id === id) {
         return {
           ...p,
           title: newName
@@ -46,7 +46,7 @@ const TaskModal:React.FC<{title:string, buttonName: string}> = ({ title, buttonN
   
   const dispatch = useAppDispatch()
 
-  const getSubtasks = subTasks.map(a => {
+  const getSubtasks = subTasks.map((a:any) => {
     return {title: a.title}
   })
 
@@ -55,24 +55,31 @@ const TaskModal:React.FC<{title:string, buttonName: string}> = ({ title, buttonN
       title: taskName,
       description,
       subtasks: getSubtasks,
-      status: statusRef.current !== null && statusRef.current.value
+      status: edit ? task.status : statusRef.current !== null && statusRef.current.value,
+      task_id: edit && task._id
     }
 
-    dispatch(addNewTask(taskDetails))
+    if (edit) {
+      dispatch(editTask(taskDetails))
+    } else {
+
+      dispatch(addNewTask(taskDetails))
+    }
+
     // console.log(getSubtasks)
     
   }
   return (
     <Modal>
       <h1>{title}</h1>
-      <Inputs name="Title" type="text" onChange={handleNameChange}/>
+      <Inputs name="Title" type="text" onChange={handleNameChange} value={taskName}/>
       <div>
         <label htmlFor="description">Description</label>
-        <textarea name="description" id="description" onChange={handleDescriptionChange}/>
+        <textarea name="description" id="description" onChange={handleDescriptionChange} value={description}/>
       </div>
       <Inputs name="Subtasks" type="text" inputArray={subTasks} handleRemove={handleRemove} onChange={handleOnChange}/>
 
-      <button className="btn primary-btn" onClick={() => setSubTasks(prev => [...prev, {id: nanoid(), title: ''}])}>+ Add New Subtask</button>
+      <button className="btn primary-btn" onClick={() => setSubTasks((prev:any) => [...prev, {_id: nanoid(), title: ''}])}>+ Add New Subtask</button>
 
       <div className="select">
         <label htmlFor="Status">Status</label>

@@ -25,9 +25,21 @@ const createNewBoard = async (token:string, boardDetails:any) => {
   return response.data
 }
 
+const editBoard = async (token:string,boardId:string, updatedBoardDetails:any) => {
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
+  }
+
+  const response = await axios.patch(API_URL+boardId, updatedBoardDetails, config)
+  return response.data
+}
+
 const boardService = {
   getAllBoards,
-  createNewBoard
+  createNewBoard,
+  editBoard
 }
 
 export default boardService

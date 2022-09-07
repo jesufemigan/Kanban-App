@@ -70,12 +70,36 @@ export const createNewBoard = createAsyncThunk('board/createNew', async (boardDe
   }
 })
 
+export const editBoard = createAsyncThunk('board/edit', async (updatedBoardDetails:any, thunkAPI) => {
+  try {
+    const appState = thunkAPI.getState() as RootState
+    const token = appState.auth.user.token
+    const boardId = appState.ids.boardId
+    return await boardService.editBoard(token, boardId, updatedBoardDetails)
+  } catch (error:any) {
+    const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString()
+    return thunkAPI.rejectWithValue(message)
+  }
+})
+
 export const addNewTask = createAsyncThunk('board/task/createNew', async (taskDetails:any, thunkAPI) => {
   try {
     const appState = thunkAPI.getState() as RootState
     const token = appState.auth.user.token
-    const boardId = appState.currentBoardId.id
+    const boardId = appState.ids.boardId
     return await taskService.addNewTask(token, boardId, taskDetails)
+  } catch (error:any) {
+    const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString()
+    return thunkAPI.rejectWithValue(message)
+  }
+})
+
+export const editTask = createAsyncThunk('board/task/edit', async (updatedTaskDetails:any, thunkAPI) => {
+  try {
+    const appState = thunkAPI.getState() as RootState
+    const token = appState.auth.user.token
+    const boardId = appState.ids.boardId
+    return await taskService.editTask(token, boardId, updatedTaskDetails)
   } catch (error:any) {
     const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString()
     return thunkAPI.rejectWithValue(message)
@@ -116,6 +140,19 @@ export const boardSlice = createSlice({
           state.isError = true
           state.message = action.payload as string
         })
+        .addCase(editBoard.pending, (state) => {
+          state.isLoading = true
+        })
+        .addCase(editBoard.fulfilled, (state, action) => {
+          state.isLoading = false
+          state.isSuccess = true
+          state.boards = action.payload
+        })
+        .addCase(editBoard.rejected, (state, action) => {
+          state.isLoading = false
+          state.isError = true
+          state.message = action.payload as string
+        })
         .addCase(addNewTask.pending, (state) => {
           state.isLoading = true
         })
@@ -125,6 +162,19 @@ export const boardSlice = createSlice({
           state.boards = action.payload
         })
         .addCase(addNewTask.rejected, (state, action) => {
+          state.isLoading = false
+          state.isError = true
+          state.message = action.payload as string
+        })
+        .addCase(editTask.pending, (state) => {
+          state.isLoading = false
+        })
+        .addCase(editTask.fulfilled, (state, action) => {
+          state.isLoading = false
+          state.isSuccess = true
+          state.boards = action.payload
+        })
+        .addCase(editTask.rejected, (state, action) => {
           state.isLoading = false
           state.isError = true
           state.message = action.payload as string

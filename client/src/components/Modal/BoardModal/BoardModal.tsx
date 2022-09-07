@@ -3,25 +3,36 @@ import Inputs from "../../Inputs";
 import { useState } from "react";
 import { nanoid } from "@reduxjs/toolkit";
 
-import { useAppDispatch } from "../../../app/hooks";
-import { createNewBoard } from "../../../features/board/boardSlice";
+import { useAppDispatch, useAppSelector } from "../../../app/hooks";
+import { createNewBoard, editBoard } from "../../../features/board/boardSlice";
 
 
-const BoardModal: React.FC<{title: string, buttonName: string}> = ({ title, buttonName }) => {
+const BoardModal: React.FC<{title: string, buttonName: string, edit?: boolean}> = ({ title, buttonName, edit }) => {
+  const { boardId } = useAppSelector(state => state.ids)
+  const { boards } = useAppSelector(state => state.board)
+  const currentBoard = boards.find(board => board._id === boardId)
+  
   const [columns, setColumns] = useState([{
-    id: nanoid(),
-    name: ''
+    _id: nanoid(),
+    title: ''
   }])
-  const [boardName, setBoardName] = useState('')
+
+  const [editColumns, setEditColumns] = useState<any>(currentBoard!.columns)
+  const [boardName, setBoardName] = useState(edit ? currentBoard?.title : '')
 
   const handleRemove = (id: any) => {
-    setColumns(prev => prev.filter(prev => prev.id !== id))
+    if (edit) {
+      setEditColumns((prev:any[]) => prev.filter(prev => prev._id !== id))
+    }
+    setColumns(prev => prev.filter(prev => prev._id !== id))
   }
 
   const dispatch = useAppDispatch()
 
-  const getColumns = columns.map(a => {
-    return {title: a.name}
+  const getColumns = edit ? editColumns.map((a:any) => {
+    return {title: a.title}
+  }) : columns.map(a => {
+    return {title: a.title}
   })
 
   const showAllColumns = () => {
@@ -29,8 +40,11 @@ const BoardModal: React.FC<{title: string, buttonName: string}> = ({ title, butt
       title: boardName,
       columns: getColumns
     }
-    
-    dispatch(createNewBoard(boardDetails))
+    if (edit) {
+      dispatch(editBoard(boardDetails))
+    } else {
+      dispatch(createNewBoard(boardDetails))
+    }
   }
 
   const handleNameChange = (e:any) => {
@@ -40,11 +54,23 @@ const BoardModal: React.FC<{title: string, buttonName: string}> = ({ title, butt
   const handleOnChange = (e:any, id:any) => {
     
     const newName = e.target.value
+    if (edit) {
+      // eslint-disable-next-line array-callback-return
+      setEditColumns((prev:any[]) => prev.map((p:any) => {
+        if (p._id === id) {
+          return {
+            ...p,
+            title: newName
+          }
+        }
+        return p
+      }))
+    }
     setColumns(prev => prev.map(p => {
-      if (p.id === id) {
+      if (p._id === id) {
         return {
           ...p,
-          name: newName
+          title: newName
         }
       }
       return p
@@ -52,13 +78,20 @@ const BoardModal: React.FC<{title: string, buttonName: string}> = ({ title, butt
     
   }
 
+  const handleNewColumns = () => {
+    if (edit) {
+      setEditColumns((prev:any[]) => [...prev, {_id: nanoid(), title: ''}])
+    }
+    setColumns(prev => [...prev, {_id: nanoid(), title: ''}])
+  }
+
   
   return (
     <Modal>
       <h1>{title}</h1>
-      <Inputs name="Name" type="text" onChange={handleNameChange}/>
-      <Inputs name="Column" type="text" inputArray={columns} handleRemove={handleRemove} onChange={handleOnChange}/>
-      <button className="btn primary-btn" onClick={() => setColumns(prev => [...prev, {id: nanoid(), name: ''}])}>+ Add New Column</button>
+      <Inputs name="Name" type="text" onChange={handleNameChange} value={boardName}/>
+      <Inputs name="Column" type="text" inputArray={edit ? editColumns : columns} handleRemove={handleRemove} onChange={handleOnChange}/>
+      <button className="btn primary-btn" onClick={handleNewColumns}>+ Add New Column</button>
       <button className="btn secondary-btn" onClick={showAllColumns}>{buttonName}</button>
     </Modal>  
   )

@@ -8,7 +8,7 @@ export const store = configureStore({
     modal: modalReducer,
     auth: authReducer,
     board: boardReducer,
-    currentBoardId: boardIdReducer
+    ids: boardIdReducer
   }
 })
 

@@ -1,11 +1,13 @@
 import { createSlice } from "@reduxjs/toolkit"
 
 interface IState {
-  id: string
+  boardId: string
+  task: any
 }
 
 const initialState: IState = {
-  id: ''
+  boardId: '',
+  task: {}
 }
 
 export const currentBoardSlice = createSlice({
@@ -13,12 +15,15 @@ export const currentBoardSlice = createSlice({
   initialState,
   reducers: {
     changeBoardId: (state, action) => {
-      state.id = action.payload
+      state.boardId = action.payload
+    },
+    changeTask: (state, action) => {
+      state.task = action.payload
     }
   }
 
 })
 
-export const { changeBoardId } = currentBoardSlice.actions
+export const { changeBoardId, changeTask } = currentBoardSlice.actions
 export default currentBoardSlice.reducer
 

@@ -27,7 +27,7 @@ const Column: React.FC<IColumn> = ({ title, tasks }) => {
       </span>
       <div className={`${tasks.length === 0 ? 'empty' : ''} column__tasks`}>
         {tasks.map(task => (
-          <Task title={task.title} completedTask={0} allTasks={tasks.length}/> 
+          <Task title={task.title} completedTask={0} allTasks={tasks.length} key={task._id} task={task}/>
         ))}
       </div>
 

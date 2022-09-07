@@ -14,8 +14,21 @@ const addNewTask = async (token:string, boardId:string, taskDetails:any) => {
   return response.data
 }
 
+const editTask = async (token:string, boardId:string, updatedTaskDetails:any) => {
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
+  }
+
+  const response = await axios.patch(API_URL+boardId, updatedTaskDetails, config)
+
+  return response.data
+}
+
 const taskService = {
-  addNewTask
+  addNewTask,
+  editTask
 }
 
 export default taskService

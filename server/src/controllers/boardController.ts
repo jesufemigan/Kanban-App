@@ -24,9 +24,10 @@ export const editBoard: RequestHandler = expressAsyncHandler(async (req: Request
   const { board_id } = req.params
   const { title, columns } = req.body
 
-  const board = await Board.findByIdAndUpdate(board_id, { title, columns }, { new: true })
+  await Board.findByIdAndUpdate(board_id, { title, columns }, { new: true })
+  const allBoard = await Board.find({id: req.userId})
 
-  res.status(200).json(board)
+  res.status(200).json(allBoard)
 })
 
 export const deleteBoard: RequestHandler = expressAsyncHandler(async (req:Request, res:Response) => {
