@@ -38,10 +38,23 @@ const updateSubTask = async (token:string, boardId:string, details:any) => {
   return response.data
 }
 
+const deleteTask = async (token:string, boardId:string, details:any) => {
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
+  }
+
+  const response = await axios.patch(API_URL+boardId+'/deleteTask',details, config)
+
+  return response.data
+}
+
 const taskService = {
   addNewTask,
   editTask,
-  updateSubTask
+  updateSubTask,
+  deleteTask
 }
 
 export default taskService

@@ -6,6 +6,7 @@ import { nanoid } from "@reduxjs/toolkit";
 
 import { addNewTask, editTask } from "../../../features/board/boardSlice";
 import { useAppDispatch, useAppSelector } from "../../../app/hooks";
+import { closeModal } from "../../../features/modal/modalSlice";
 
 const TaskModal:React.FC<{title:string, buttonName: string, edit?: boolean}> = ({ title, buttonName, edit }) => {
   const { boardId, task } = useAppSelector(state => state.ids)
@@ -65,9 +66,7 @@ const TaskModal:React.FC<{title:string, buttonName: string, edit?: boolean}> = (
 
       dispatch(addNewTask(taskDetails))
     }
-
-    // console.log(getSubtasks)
-    
+    dispatch(closeModal())
   }
   return (
     <Modal>

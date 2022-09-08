@@ -1,6 +1,11 @@
 @use '../utils/' as u;
 @use '../globals/' as g;
 
+
+.mobileSideBar .sideBar {
+  display: block;
+  top: u.rem(90);
+}
 .sideBar {
   position: relative;
   padding-left: 0;
@@ -10,12 +15,14 @@
   width: u.rem(300);
   height: fit-content;
   padding-bottom: u.rem(40);
+  display: none;
 
   @include u.breakpoint(medium) {
     border-radius: 0;
     height: calc(100vh - u.rem(100));
     border-right: u.rem(1) solid u.color(borderLine);
     width: u.rem(340);
+    display: block;
   }
 
 

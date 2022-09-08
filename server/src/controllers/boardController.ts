@@ -31,10 +31,9 @@ export const editBoard: RequestHandler = expressAsyncHandler(async (req: Request
 })
 
 export const deleteBoard: RequestHandler = expressAsyncHandler(async (req:Request, res:Response) => {
-  const { id } = req.params
+  const { board_id } = req.params
+  await Board.findByIdAndDelete(board_id)
+  const allBoard = await Board.find({id:req.userId})
 
-  await Board.findByIdAndDelete(id)
-
-  res.json({ message: "Board delete successfully" })
-
+  res.json(allBoard)
 })

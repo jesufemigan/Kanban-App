@@ -26,7 +26,7 @@ const SideBar = () => {
   return (
     <div className="sideBar">
       <div className="allBoards">
-        <p>All Boards (2)</p>
+        <p>All Boards ({boards.length})</p>
         <div className="eachBoard">
           {boards.map(board => (
             <span className='active' key={board.title}>

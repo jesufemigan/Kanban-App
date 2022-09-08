@@ -9,6 +9,9 @@ const TaskDetails:React.FC<{task:any}> = ({ task }) => {
   const { boardId } = useAppSelector(state => state.ids)
   const { boards } = useAppSelector(state => state.board)
 
+  const completedSubTask = task.subtasks.filter((sub:any) => sub.isCompleted).length
+  const totalSubTask = task.subtasks.length
+
   const [dropDown, setDropDown] = useState(false)
 
   const dispatch = useAppDispatch()
@@ -33,22 +36,26 @@ const TaskDetails:React.FC<{task:any}> = ({ task }) => {
             <img src={ellipsis} alt="" onClick={() => setDropDown(prev => !prev)}/>
             <div className={`taskDetails__action--content ${!dropDown ? `cancel` : ''}`}>
               <p onClick={() => dispatch(openModal("EditTask"))}>Edit Task</p>
-              <p>Delete Task</p>
+              <p onClick={() => dispatch(openModal("DeleteTask"))}>Delete Task</p>
             </div>
           </div>
         </div>
         <p className="taskDetails__description">{task.description}</p>
-        <p>Subtasks ({1} of {3})</p>
+        <p>Subtasks ({completedSubTask} of {totalSubTask})</p>
         <div className="allSubtasks">
-          {task.subtasks.map((sub:any) => (
-            <div key={sub._id} className="allSubtasks__each">
-              <label className="checkbox">
-                {sub.title}
-                <input type="checkbox" checked={sub.isCompleted} onChange={() => handleSubTaskChange(sub._id)}/>
-                <span className="checkmark"></span>
-              </label>
-            </div>
-          ))}
+          {task.subtasks[0].title === '' ? (
+            <p>No subtasks</p>
+          ) : (
+            task.subtasks.map((sub:any) => (
+              <div key={sub._id} className="allSubtasks__each">
+                <label className="checkbox">
+                  {sub.title}
+                  <input type="checkbox" checked={sub.isCompleted} onChange={() => handleSubTaskChange(sub._id)}/>
+                  <span className="checkmark"></span>
+                </label>
+              </div>
+            ))
+          )}
         </div>
         <div>
           <label htmlFor="">Current Status</label>

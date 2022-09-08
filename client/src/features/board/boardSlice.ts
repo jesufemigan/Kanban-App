@@ -1,4 +1,4 @@
-import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import boardService from './boardService'
 import taskService from "./taskService";
 
@@ -82,6 +82,19 @@ export const editBoard = createAsyncThunk('board/edit', async (updatedBoardDetai
   }
 })
 
+export const deleteBoard = createAsyncThunk('board/delete', async (_, thunkAPI) => {
+  try {
+    const appState = thunkAPI.getState() as RootState
+    const token = appState.auth.user.token
+    const boardId = appState.ids.boardId
+    return await boardService.deleteBoard(token, boardId)
+
+  } catch (error:any) {
+    const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString()
+    return thunkAPI.rejectWithValue(message)
+  }
+})
+
 export const addNewTask = createAsyncThunk('board/task/createNew', async (taskDetails:any, thunkAPI) => {
   try {
     const appState = thunkAPI.getState() as RootState
@@ -117,6 +130,19 @@ export const updateSubTask = createAsyncThunk('board/task/subtask/update', async
     return thunkAPI.rejectWithValue(message)
   }
 })
+
+export const deleteTask = createAsyncThunk('board/task/delete', async(details:any, thunkAPI) => {
+  try {
+    const appState = thunkAPI.getState() as RootState
+    const token = appState.auth.user.token
+    const boardId = appState.ids.boardId
+    return await taskService.deleteTask(token, boardId, details)
+  } catch (error:any) {
+    const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString()
+    return thunkAPI.rejectWithValue(message)
+  }
+})
+
 export const boardSlice = createSlice({
   name: 'board',
   initialState,
@@ -164,6 +190,19 @@ export const boardSlice = createSlice({
           state.isError = true
           state.message = action.payload as string
         })
+        .addCase(deleteBoard.pending, (state) => {
+          state.isLoading = true
+        })
+        .addCase(deleteBoard.fulfilled, (state, action) => {
+          state.isLoading = false
+          state.isSuccess = true
+          state.boards = action.payload
+        })
+        .addCase(deleteBoard.rejected, (state, action) => {
+          state.isLoading = false
+          state.isError = true
+          state.message = action.payload  as string
+        })
         .addCase(addNewTask.pending, (state) => {
           state.isLoading = true
         })
@@ -202,6 +241,19 @@ export const boardSlice = createSlice({
           state.isLoading = false
           state.isError = true
           state.message = action.payload as string
+        })
+        .addCase(deleteTask.pending, (state) => {
+          state.isLoading = true
+        })
+        .addCase(deleteTask.fulfilled, (state, action) => {
+          state.isLoading = false
+          state.isSuccess = true
+          state.boards = action.payload
+        })
+        .addCase(deleteTask.rejected, (state, action) => {
+          state.isLoading = false
+          state.isError = true
+          state.message = action.payload  as string
         })
   },
 })

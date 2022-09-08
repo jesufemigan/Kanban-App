@@ -7,13 +7,14 @@ interface InputProps {
   name: string
   inputArray?: any
   value?: string
+  noName?: boolean
   // onChange?: ChangeEventHandler<HTMLInputElement>
   onChange?: (e: ChangeEvent<HTMLInputElement>, id?: any) => void
   handleChange?: ChangeEventHandler<HTMLInputElement>
   handleRemove?: any
 }
 
-const Inputs:React.FC<InputProps> = ({ type, name, value, inputArray, onChange, handleRemove }) => {
+const Inputs:React.FC<InputProps> = ({ type, name, value, noName, inputArray, onChange, handleRemove }) => {
   const handleChange = (e: ChangeEvent<HTMLInputElement>, id?: any) => {
     if (onChange) onChange(e, id)
   } 
@@ -30,7 +31,7 @@ const Inputs:React.FC<InputProps> = ({ type, name, value, inputArray, onChange, 
           </span>
         ))
       ): (
-        <input type={type} onChange={(e) => handleChange(e)} name={name} value={value}/>
+        <input type={type} onChange={(e) => handleChange(e)} name={name} value={value} disabled={noName}/>
       )}
     </div>
   )

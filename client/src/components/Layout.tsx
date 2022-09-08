@@ -8,16 +8,15 @@ import verticalEllipsis from '../assets/icon-vertical-ellipsis.svg';
 import iconAdd from '../assets/icon-add-task-mobile.svg';
 import Column from "./Column";
 
-import { useDispatch } from 'react-redux'
 import { openModal } from "../features/modal/modalSlice";
 import { useEffect, useRef, useState } from "react";
-import { useAppSelector } from "../app/hooks";
+import { useAppSelector, useAppDispatch } from "../app/hooks";
 
 const Layout = () => {
-  const tasks: string[] = []
-  const dispatch = useDispatch()
+  const dispatch = useAppDispatch()
 
   const [isFocused, setIsFocused] = useState(false)
+  const [isMobile, setIsMobile] = useState(false)
   const boardActionRef = useRef<any>(null)
 
   const { boards } = useAppSelector(state => state.board)
@@ -49,9 +48,15 @@ const Layout = () => {
           <img src={desktopLogoLight} alt="" id="desktopLogo"/>
         </div>
         <div className="boardTitle">
-          <h1>{currentBoard?.title}</h1>
+          <h1>{currentBoard?.title || 'No Board Found'}</h1>
+          <span onClick={() => setIsMobile(prev => !prev)} style={{ transform: isMobile ? 'rotate(180deg)': ''}}>
+          <svg width="10" height="7" xmlns="http://www.w3.org/2000/svg"><path stroke="#635FC7" stroke-width="2" fill="none" d="m1 1 4 4 4-4"></path></svg>
+          </span>
+          <div className={`mobileSideBar ${isMobile && 'show'}`}>
+            <SideBar />
+          </div>
         </div>
-        <div className="actionHeader">
+        {boards.length > 0 && <div className="actionHeader">
           <button onClick={() => dispatch(openModal("AddTask"))}>
             <span>
               <img src={iconAddTask} alt="" />
@@ -66,26 +71,37 @@ const Layout = () => {
                 dispatch(openModal("EditBoard"))
                 setIsFocused(false)
                 }}>Edit Board</p>
-              <p>Delete Board</p>
+              <p
+                onClick={() => {
+                  dispatch(openModal("DeleteBoard"))
+                  setIsFocused(false)
+                }}
+              >Delete Board</p>
             </div>
           </div>
-        </div>
+        </div>}
       </header>
-      <main className="overflow">
+      <main className="overflow scroll">
         <div className="sideBarPos">
           <SideBar />
         </div>
-        <div className="column__container">
+        {boards.length > 0 ? (<div className="column__container">
           {currentBoard?.columns.map(column => (
             <Column title={column.title} tasks={column!.tasks} key={column._id}/>
           ))}
-          <div className="column__new">
+          <div className="column__new"  onClick={() => dispatch(openModal("NewColumn"))}>
             <span>
-              <img src={iconAdd} alt="" />
-              <h1>New Column</h1>
+              <h1>+ New Column</h1>
             </span>
           </div>
-        </div>
+        </div>) : (
+          <div className="noBoard">
+            <div className="noBoard__container">
+              <p>You have no board yet. Create a new board to get started</p>
+              <button onClick={() => dispatch(openModal("NewBoard"))}>+ Add New Board</button>
+            </div>
+          </div>
+        )}
       </main>
     </>
   )

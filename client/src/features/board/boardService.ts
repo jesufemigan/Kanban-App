@@ -36,10 +36,23 @@ const editBoard = async (token:string,boardId:string, updatedBoardDetails:any) =
   return response.data
 }
 
+const deleteBoard = async (token:string, boardId:string) => {
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
+  }
+
+  const response  = await axios.delete(API_URL+boardId, config)
+
+  return response.data
+}
+
 const boardService = {
   getAllBoards,
   createNewBoard,
-  editBoard
+  editBoard,
+  deleteBoard
 }
 
 export default boardService

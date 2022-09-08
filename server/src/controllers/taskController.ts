@@ -66,13 +66,13 @@ export const updateSubTask: RequestHandler = expressAsyncHandler(async (req:Requ
 
 export const deleteTask: RequestHandler = expressAsyncHandler(async (req: Request, res:Response) => {
   const { board_id } = req.params
-  const { column_id, task_id } = req.body
+  const { status, task_id } = req.body
   const board = await Board.findById(board_id)
 
   if (!board) {
     throw new Error("Board does not exist")
   }
-  const columnToUpdate = board?.columns.find(column => column._id.toString() === column_id)
+  const columnToUpdate = board.columns.find(column => column.title === status)
 
   const taskIndex = columnToUpdate!.tasks.findIndex(task => task._id!.toString() === task_id)
 

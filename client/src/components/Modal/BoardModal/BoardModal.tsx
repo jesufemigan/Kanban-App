@@ -5,9 +5,10 @@ import { nanoid } from "@reduxjs/toolkit";
 
 import { useAppDispatch, useAppSelector } from "../../../app/hooks";
 import { createNewBoard, editBoard } from "../../../features/board/boardSlice";
+import { closeModal } from "../../../features/modal/modalSlice";
 
 
-const BoardModal: React.FC<{title: string, buttonName: string, edit?: boolean}> = ({ title, buttonName, edit }) => {
+const BoardModal: React.FC<{title: string, buttonName: string, edit?: boolean, noName?:boolean}> = ({ title, buttonName, edit, noName }) => {
   const { boardId } = useAppSelector(state => state.ids)
   const { boards } = useAppSelector(state => state.board)
   const currentBoard = boards.find(board => board._id === boardId)
@@ -17,7 +18,7 @@ const BoardModal: React.FC<{title: string, buttonName: string, edit?: boolean}> 
     title: ''
   }])
 
-  const [editColumns, setEditColumns] = useState<any>(currentBoard!.columns)
+  const [editColumns, setEditColumns] = useState<any>(currentBoard?.columns)
   const [boardName, setBoardName] = useState(edit ? currentBoard?.title : '')
 
   const handleRemove = (id: any) => {
@@ -30,12 +31,15 @@ const BoardModal: React.FC<{title: string, buttonName: string, edit?: boolean}> 
   const dispatch = useAppDispatch()
 
   const getColumns = edit ? editColumns.map((a:any) => {
-    return {title: a.title}
+    return {
+      title: a.title,
+      tasks: a.tasks
+    }
   }) : columns.map(a => {
     return {title: a.title}
   })
 
-  const showAllColumns = () => {
+  const handleBoard = () => {
     const boardDetails = {
       title: boardName,
       columns: getColumns
@@ -45,6 +49,7 @@ const BoardModal: React.FC<{title: string, buttonName: string, edit?: boolean}> 
     } else {
       dispatch(createNewBoard(boardDetails))
     }
+    dispatch(closeModal())
   }
 
   const handleNameChange = (e:any) => {
@@ -89,10 +94,10 @@ const BoardModal: React.FC<{title: string, buttonName: string, edit?: boolean}> 
   return (
     <Modal>
       <h1>{title}</h1>
-      <Inputs name="Name" type="text" onChange={handleNameChange} value={boardName}/>
+      <Inputs name="Name" type="text" onChange={handleNameChange} value={boardName} noName={noName}/>
       <Inputs name="Column" type="text" inputArray={edit ? editColumns : columns} handleRemove={handleRemove} onChange={handleOnChange}/>
       <button className="btn primary-btn" onClick={handleNewColumns}>+ Add New Column</button>
-      <button className="btn secondary-btn" onClick={showAllColumns}>{buttonName}</button>
+      <button className="btn secondary-btn" onClick={handleBoard}>{buttonName}</button>
     </Modal>  
   )
 }
