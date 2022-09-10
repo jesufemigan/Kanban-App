@@ -2,6 +2,7 @@
 @use '../globals/' as g;
 
 .taskDetails {
+  color: u.color(title);
   &__header {
     display: flex;
     align-items: center;
@@ -10,7 +11,7 @@
   }
 
   &__description {
-    color: u.color(subTitle);
+    color: g.$mediumGray;
     margin-bottom: u.rem(20);
 
     & + p {
@@ -112,6 +113,15 @@
 .taskDetails__action {
   &--container {
     position: relative;
+
+    img {
+      cursor: pointer;
+      padding: u.rem(10);
+      border-radius: u.rem(10);
+      &:hover {
+        background-color: u.color(ellipsis);
+      }
+    }
   }
   &--content {
     position: absolute;
@@ -125,9 +135,34 @@
     box-shadow: 0 0 u.rem(8) #364e7e1a;
     border: u.rem(1) solid u.color(bg);
     // right: 0;
+    p {
+      font-weight: 700;
+      font-size: u.rem(18);
+      cursor: pointer;
+
+      &:hover {
+        opacity: 0.5;
+      }
+    }
+    p:first-child {
+      color: g.$mediumGray;
+      margin-bottom: u.rem(10);
+    }
+
+    p:nth-of-type(2) {
+      color: g.$red;
+    }
 
     &.cancel {
       display: none;
     }
+  }
+}
+
+.dropDown {
+  select {
+    background: transparent;
+    color: inherit;
+    margin-top: u.rem(10);
   }
 }

@@ -1,7 +1,7 @@
 import Modal from "../Modal"
 import Inputs from "../../Inputs";
 
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { nanoid } from "@reduxjs/toolkit";
 
 import { addNewTask, editTask } from "../../../features/board/boardSlice";
@@ -44,6 +44,7 @@ const TaskModal:React.FC<{title:string, buttonName: string, edit?: boolean}> = (
     }))
     
   }
+
   
   const dispatch = useAppDispatch()
 
@@ -51,7 +52,16 @@ const TaskModal:React.FC<{title:string, buttonName: string, edit?: boolean}> = (
     return {title: a.title}
   })
 
-  const handleCreateNewTask = () => {
+  const [isNameEmpty, setIsNameEmpty] = useState('')
+  const [isSubtaskEmpty, setIssubtaskEmpty] = useState(false)
+
+  const validate = (func:any) => {
+    return func
+  }
+
+  
+  const handleCreateNewTask = (e:any) => {
+    e.preventDefault()
     const taskDetails = {
       title: taskName,
       description,
@@ -60,10 +70,15 @@ const TaskModal:React.FC<{title:string, buttonName: string, edit?: boolean}> = (
       task_id: edit && task._id
     }
 
+    if (taskName.length === 0) {
+      setIsNameEmpty('yes')
+    }
+    
+    
+
     if (edit) {
       dispatch(editTask(taskDetails))
     } else {
-
       dispatch(addNewTask(taskDetails))
     }
     dispatch(closeModal())
@@ -71,25 +86,25 @@ const TaskModal:React.FC<{title:string, buttonName: string, edit?: boolean}> = (
   return (
     <Modal>
       <h1>{title}</h1>
-      <Inputs name="Title" type="text" onChange={handleNameChange} value={taskName}/>
-      <div>
-        <label htmlFor="description">Description</label>
-        <textarea name="description" id="description" onChange={handleDescriptionChange} value={description}/>
-      </div>
-      <Inputs name="Subtasks" type="text" inputArray={subTasks} handleRemove={handleRemove} onChange={handleOnChange}/>
+        <Inputs name="Title" type="text" onChange={handleNameChange} value={taskName} />
+        <div>
+          <label htmlFor="description">Description</label>
+          <textarea name="description" id="description" onChange={handleDescriptionChange} value={description}/>
+        </div>
+        <Inputs name="Subtasks" type="text" inputArray={subTasks} handleRemove={handleRemove} onChange={handleOnChange} />
 
-      <button className="btn primary-btn" onClick={() => setSubTasks((prev:any) => [...prev, {_id: nanoid(), title: ''}])}>+ Add New Subtask</button>
+        <button className="btn primary-btn" onClick={() => setSubTasks((prev:any) => [...prev, {_id: nanoid(), title: ''}])}>+ Add New Subtask</button>
 
-      <div className="select">
-        <label htmlFor="Status">Status</label>
-        <select name="Status" id="Status" ref={statusRef}>
-          {currentBoard?.columns.map(column => (
-            <option value={column.title} key={column._id}>{column.title}</option>
-          ))}
-        </select>
-      </div>
+        <div className="select">
+          <label htmlFor="Status">Status</label>
+          <select name="Status" id="Status" ref={statusRef}>
+            {currentBoard?.columns.map(column => (
+              <option value={column.title} key={column._id}>{column.title}</option>
+            ))}
+          </select>
+        </div>
 
-      <button className="btn secondary-btn" onClick={handleCreateNewTask}>{buttonName}</button>
+        <button className="btn secondary-btn" onClick={handleCreateNewTask}>{buttonName}</button>
     </Modal>
   )
 }

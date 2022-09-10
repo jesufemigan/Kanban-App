@@ -26,6 +26,12 @@ button {
   cursor: pointer;
 }
 
+input, textarea {
+  font-family: inherit;
+  background: transparent;
+  color: inherit;
+}
+
 a {
   text-decoration: none;
   color: inherit;

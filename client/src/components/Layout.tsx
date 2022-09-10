@@ -21,6 +21,7 @@ const Layout = () => {
 
   const { boards } = useAppSelector(state => state.board)
   const { boardId } = useAppSelector(state => state.ids)
+  const { theme } = useAppSelector(state => state.theme)
 
   useEffect(() => {
     function handleClickOutside(e: any) {
@@ -45,7 +46,7 @@ const Layout = () => {
       <header>
         <div className="logo">
           <img src={mobileLogo} alt="" id="mobileLogo"/>
-          <img src={desktopLogoLight} alt="" id="desktopLogo"/>
+          <img src={theme === 'light' ? desktopLogoLight : desktopLogoDark} alt="" id="desktopLogo"/>
         </div>
         <div className="boardTitle">
           <h1>{currentBoard?.title || 'No Board Found'}</h1>

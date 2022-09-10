@@ -37,7 +37,11 @@
 .allBoards > p {
   text-transform: uppercase;
   padding: u.rem(10) 0;
-  padding-left: u.rem(20);
+  padding-left: u.rem(45);
+  letter-spacing: u.rem(2.4);
+  font-size: u.rem(12);
+  color: g.$mediumGray;
+  font-weight: 700;
 }
 
 .desktopLogo {
@@ -55,31 +59,49 @@
     display: flex;
     align-items: center;
     gap: u.rem(15);
-    padding-left: u.rem(20);
     padding: u.rem(10) u.rem(20);
+    padding-left: u.rem(40);
     border-radius: 0 u.rem(20) u.rem(20) 0;
+
+    cursor: pointer;
+
+    &:hover:not(.active) {
+      background-color: g.$lightBlue;
+      color: white;
+    }
   }
 
   display: flex;
   flex-direction: column;
   gap: u.rem(10);
   padding-right: u.rem(20);
+  color: g.$mediumGray;
+  font-size: u.rem(20);
+  font-weight: 700;
 
   .active {
     background-color: g.$darkBlue;
+    color: white;
   }
 }
 
 .newBoard {
   display: flex;
   align-items: center;
+  gap: u.rem(20);
   margin-top: u.rem(20);
-  padding-left: u.rem(20);
+  padding-left: u.rem(40);
   color: g.$darkBlue;
   margin-bottom: u.rem(60);
+  cursor: pointer;
 
+  
   span {
-    display: inline-flex;
+    font-weight: 700;
+    color: g.$darkBlue;
+    &:hover {
+      color: g.$lightBlue;
+    }
   }
 }
 

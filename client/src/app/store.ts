@@ -3,12 +3,14 @@ import modalReducer from '../features/modal/modalSlice';
 import boardReducer from '../features/board/boardSlice';
 import authReducer from '../features/auth/authSlice';
 import boardIdReducer from '../features/currentBoardReducer';
+import themeReducer from '../features/themeReducer';
 export const store = configureStore({
   reducer: {
     modal: modalReducer,
     auth: authReducer,
     board: boardReducer,
-    ids: boardIdReducer
+    ids: boardIdReducer,
+    theme: themeReducer
   }
 })
 

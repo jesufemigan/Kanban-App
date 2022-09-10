@@ -1,4 +1,4 @@
-import { ChangeEvent, ChangeEventHandler, Key } from 'react';
+import { ChangeEvent, ChangeEventHandler, Key, useEffect, useState } from 'react';
 import deleteButton from '../assets/icon-cross.svg';
 
 
@@ -12,19 +12,24 @@ interface InputProps {
   onChange?: (e: ChangeEvent<HTMLInputElement>, id?: any) => void
   handleChange?: ChangeEventHandler<HTMLInputElement>
   handleRemove?: any
+  isEmpty?: string
+  validate?: (arg:any) => any
 }
 
-const Inputs:React.FC<InputProps> = ({ type, name, value, noName, inputArray, onChange, handleRemove }) => {
+const Inputs:React.FC<InputProps> = ({ type, name, value, noName, inputArray, onChange, handleRemove, isEmpty, validate }) => {
   const handleChange = (e: ChangeEvent<HTMLInputElement>, id?: any) => {
     if (onChange) onChange(e, id)
-  } 
+  }
+
+  
+  
   return (
     <div className="input">
       <label htmlFor={name}>{name}</label>
       {inputArray ? (
         inputArray.map((obj: any, index:any) => (
           <span key={obj._id}>
-            <input type={type} name={name} onChange={(e) => handleChange(e, obj._id)} value={obj.title}/>
+            <input type={type} name={name} onChange={(e) => handleChange(e, obj._id)} value={obj.title} />
             {inputArray.length > 1 && (
               <img src={deleteButton} alt="" onClick={() => handleRemove(obj._id)}/>
             )}

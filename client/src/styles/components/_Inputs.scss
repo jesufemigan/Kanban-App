@@ -27,6 +27,10 @@ input, textarea, select {
   }
 }
 
+input.isEmpty {
+  border: u.rem(2) solid g.$red;
+}
+
 textarea {
   resize: none;
   height: u.rem(100);

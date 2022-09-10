@@ -6,13 +6,18 @@
   padding: u.rem(20) u.rem(25);
   border-radius: u.rem(10);
   box-shadow: 0 u.rem(4) u.rem(6) g.$cardShadow;
-
+  
   &:hover {
     cursor: pointer;
     filter: opacity(45%);
   }
-
+  
+  p {
+    color: g.$mediumGray;
+  }
+  
   h3 {
+    color: u.color(title);
     margin-bottom: u.rem(20);
   }
 }

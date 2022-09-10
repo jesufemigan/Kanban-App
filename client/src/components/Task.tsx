@@ -5,25 +5,27 @@ import {openModal} from '../features/modal/modalSlice'
 
 interface ITaskProps {
   title: string
-  completedTask: Number
-  allTasks: Number
+  subtasks: any[]
   task: any
 }
 
 
-const Task: React.FC<ITaskProps> = ({ title, completedTask, allTasks, task }) => {
+const Task: React.FC<ITaskProps> = ({ title, subtasks, task }) => {
   const dispatch = useAppDispatch()
 
   const handleOpenTask = () => {
     dispatch(openModal("TaskDetails"))
     dispatch(changeTask(task))
   }
+
+  const completedSubtask = task.subtasks.filter((sub:any) => sub.isCompleted).length
+  const totalSubtask = task.subtasks.length
   return (
     <div className="task" onClick={handleOpenTask}>
       <h3>{title}</h3>
       <p>
         <>
-        {completedTask} of {allTasks} subtasks
+        {completedSubtask} of {totalSubtask} subtasks
         </>
       </p>
     </div>

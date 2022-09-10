@@ -19,6 +19,7 @@ interface ITask {
   subtasks: ISubtask[]
 }
 const Column: React.FC<IColumn> = ({ title, tasks }) => {
+  
   return (
     <div className="column">
       <span>
@@ -27,7 +28,7 @@ const Column: React.FC<IColumn> = ({ title, tasks }) => {
       </span>
       <div className={`${tasks.length === 0 ? 'empty' : ''} column__tasks`}>
         {tasks.map(task => (
-          <Task title={task.title} completedTask={0} allTasks={tasks.length} key={task._id} task={task}/>
+          <Task title={task.title} key={task._id} task={task} subtasks={task.subtasks}/>
         ))}
       </div>
 

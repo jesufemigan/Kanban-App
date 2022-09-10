@@ -2,7 +2,7 @@ import Modal from "../Modal"
 import ellipsis from '../../../assets/icon-vertical-ellipsis.svg'
 import { useAppSelector, useAppDispatch } from "../../../app/hooks"
 import { openModal } from "../../../features/modal/modalSlice"
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { updateSubTask } from "../../../features/board/boardSlice"
 
 const TaskDetails:React.FC<{task:any}> = ({ task }) => {
@@ -27,6 +27,20 @@ const TaskDetails:React.FC<{task:any}> = ({ task }) => {
 
     dispatch(updateSubTask(details))
   }
+
+  const taskRef = useRef<any>(null)
+  useEffect(() => {
+    function handleClickOutside(e: any) {
+      if (taskRef.current && !taskRef.current.contains(e.target)) {
+        setDropDown(false)
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside)
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside)
+    }
+  }, [taskRef])
   return (
     <Modal>
       <div className="taskDetails">
@@ -34,13 +48,13 @@ const TaskDetails:React.FC<{task:any}> = ({ task }) => {
           <h2>{task.title}</h2>
           <div className="taskDetails__action--container">
             <img src={ellipsis} alt="" onClick={() => setDropDown(prev => !prev)}/>
-            <div className={`taskDetails__action--content ${!dropDown ? `cancel` : ''}`}>
+            <div className={`taskDetails__action--content ${!dropDown ? `cancel` : ''}`} ref={taskRef}>
               <p onClick={() => dispatch(openModal("EditTask"))}>Edit Task</p>
               <p onClick={() => dispatch(openModal("DeleteTask"))}>Delete Task</p>
             </div>
           </div>
         </div>
-        <p className="taskDetails__description">{task.description}</p>
+        <p className="taskDetails__description">{task.description === "" ? 'No description' : task.description}</p>
         <p>Subtasks ({completedSubTask} of {totalSubTask})</p>
         <div className="allSubtasks">
           {task.subtasks[0].title === '' ? (
@@ -57,7 +71,7 @@ const TaskDetails:React.FC<{task:any}> = ({ task }) => {
             ))
           )}
         </div>
-        <div>
+        <div className="dropDown">
           <label htmlFor="">Current Status</label>
           <select name="columns" id="" value={task.status}>
             {currentBoard?.columns.map(column => (

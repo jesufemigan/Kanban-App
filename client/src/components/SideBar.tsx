@@ -6,22 +6,24 @@ import iconLightTheme from '../assets/icon-light-theme.svg';
 import iconHide from '../assets/icon-hide-sidebar.svg';
 import boardService from '../features/board/boardService';
 
-import { useAppSelector } from '../app/hooks';
-import { useDispatch } from 'react-redux';
+import { useAppSelector, useAppDispatch } from '../app/hooks';
 import { openModal } from '../features/modal/modalSlice';
 import { useEffect } from 'react'
 import { changeBoardId } from '../features/currentBoardReducer';
+import { changeTheme } from '../features/themeReducer';
 
 const SideBar = () => {
   const { boards } = useAppSelector(state => state.board)
+  const { boardId } = useAppSelector(state => state.ids)
 
-  const dispatch = useDispatch()
+  const dispatch = useAppDispatch()
 
   useEffect(() => {
     if (boards.length > 0) {
       dispatch(changeBoardId(boards[0]._id))
     }
-  }, [dispatch, boards])
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
   
   return (
     <div className="sideBar">
@@ -29,7 +31,7 @@ const SideBar = () => {
         <p>All Boards ({boards.length})</p>
         <div className="eachBoard">
           {boards.map(board => (
-            <span className='active' key={board.title}>
+            <span className={boardId === board._id ? 'active' : ''} key={board.title} onClick={() => dispatch(changeBoardId(board._id))}>
               <img src={iconBoard} alt="" />
               <p>{board.title}</p>
             </span>
@@ -38,8 +40,7 @@ const SideBar = () => {
         <div className="newBoard">
           <img src={iconBoard} alt="" />
           <span>
-            <img src={iconAddTask} alt="" />
-            <p onClick={() => dispatch(openModal("NewBoard"))}>Create New Board</p>
+            <p onClick={() => dispatch(openModal("NewBoard"))}>+ Create New Board</p>
           </span>
         </div>
       </div>
@@ -48,7 +49,7 @@ const SideBar = () => {
           <img src={iconDarkTheme} alt="" />
           <div className="themeToggler__input">
             <label className='switch'>
-              <input type="checkbox" />
+              <input type="checkbox" onChange={() => dispatch(changeTheme())}/>
               <span className='slider round'></span>
             </label>
           </div>
