@@ -8,11 +8,11 @@ import boardService from '../features/board/boardService';
 
 import { useAppSelector, useAppDispatch } from '../app/hooks';
 import { openModal } from '../features/modal/modalSlice';
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { changeBoardId } from '../features/currentBoardReducer';
 import { changeTheme } from '../features/themeReducer';
 
-const SideBar = () => {
+const SideBar: React.FC<{hide?:any, setHide?:React.Dispatch<React.SetStateAction<boolean>>}> = ({ hide, setHide }) => {
   const { boards } = useAppSelector(state => state.board)
   const { boardId } = useAppSelector(state => state.ids)
 
@@ -23,10 +23,11 @@ const SideBar = () => {
       dispatch(changeBoardId(boards[0]._id))
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [boards])
+
   
   return (
-    <div className="sideBar">
+    <div className={`sideBar ${hide ? 'hide' : ''}`}>
       <div className="allBoards">
         <p>All Boards ({boards.length})</p>
         <div className="eachBoard">
@@ -55,7 +56,7 @@ const SideBar = () => {
           </div>
           <img src={iconLightTheme} alt="" />
         </div>
-        <div className="sideBarAction">
+        <div className="sideBarAction" onClick={() => {if (setHide) setHide(prev => !prev)}}>
           <img src={iconHide} alt="" />
           <p>Hide Sidebar</p>
         </div>

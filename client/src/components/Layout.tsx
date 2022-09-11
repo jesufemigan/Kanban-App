@@ -6,11 +6,13 @@ import mobileLogo from '../assets/logo-mobile.svg';
 import iconAddTask from '../assets/icon-add-task-mobile.svg';
 import verticalEllipsis from '../assets/icon-vertical-ellipsis.svg';
 import iconAdd from '../assets/icon-add-task-mobile.svg';
+import showSideBar from '../assets/icon-show-sidebar.svg';
 import Column from "./Column";
 
 import { openModal } from "../features/modal/modalSlice";
 import { useEffect, useRef, useState } from "react";
 import { useAppSelector, useAppDispatch } from "../app/hooks";
+import { changeBoardId } from "../features/currentBoardReducer";
 
 const Layout = () => {
   const dispatch = useAppDispatch()
@@ -23,6 +25,8 @@ const Layout = () => {
   const { boardId } = useAppSelector(state => state.ids)
   const { theme } = useAppSelector(state => state.theme)
 
+
+  const [hide, setHide] = useState(false)
   useEffect(() => {
     function handleClickOutside(e: any) {
       if (boardActionRef.current && !boardActionRef.current.contains(e.target)) {
@@ -82,11 +86,11 @@ const Layout = () => {
           </div>
         </div>}
       </header>
-      <main className="overflow scroll">
+      <main className={`overflow scroll`}>
         <div className="sideBarPos">
-          <SideBar />
+          <SideBar hide={hide} setHide={setHide}/>
         </div>
-        {boards.length > 0 ? (<div className="column__container">
+        {boards.length > 0 ? (<div className={`column__container ${hide ? 'mainHide' : ''}`}>
           {currentBoard?.columns.map(column => (
             <Column title={column.title} tasks={column!.tasks} key={column._id}/>
           ))}
@@ -103,6 +107,7 @@ const Layout = () => {
             </div>
           </div>
         )}
+        {hide && <div className="showSideBar" onClick={() => setHide(prev => !prev)}><img src={showSideBar} alt="" /></div>}
       </main>
     </>
   )

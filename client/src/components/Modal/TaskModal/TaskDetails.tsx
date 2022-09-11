@@ -55,9 +55,9 @@ const TaskDetails:React.FC<{task:any}> = ({ task }) => {
           </div>
         </div>
         <p className="taskDetails__description">{task.description === "" ? 'No description' : task.description}</p>
-        <p>Subtasks ({completedSubTask} of {totalSubTask})</p>
+        <p className="taskDetails__subtasks">Subtasks ({completedSubTask} of {totalSubTask})</p>
         <div className="allSubtasks">
-          {task.subtasks[0].title === '' ? (
+          {task.subtasks.length  === 0 ? (
             <p>No subtasks</p>
           ) : (
             task.subtasks.map((sub:any) => (

@@ -11,7 +11,7 @@
   }
 
   &__description {
-    color: g.$mediumGray;
+    color: u.color(subTitle);
     margin-bottom: u.rem(20);
 
     & + p {
@@ -19,11 +19,20 @@
     }
   }
 
+  &__subtasks {
+    color: u.color(subTitle);
+    font-weight: 700;
+  }
+
   .allSubtasks {
     display: flex;
     flex-direction: column;
     gap: u.rem(10);
     margin-bottom: u.rem(15);
+
+    p {
+      color: u.color(subTitle);
+    }
 
     &__each {
       display: flex;
@@ -160,6 +169,12 @@
 }
 
 .dropDown {
+  label {
+    color: u.color(subTitle);
+    font-weight: 700;
+    font-size: u.rem(14);
+  }
+  
   select {
     background: transparent;
     color: inherit;

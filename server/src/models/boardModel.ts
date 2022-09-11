@@ -9,7 +9,7 @@ interface ISubtask {
 interface ITask {
   _id?: string
   title: string
-  description: string[]
+  description: string
   status: string
   subtasks: ISubtask[]
 }
@@ -37,7 +37,7 @@ const subTaskSchema = new Schema<ISubtask>({
 
 const taskSchema = new Schema<ITask>({
   title: String,
-  description: [String],
+  description: String,
   subtasks: [subTaskSchema],
   status: {
     type: String,

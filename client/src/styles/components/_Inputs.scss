@@ -5,12 +5,26 @@
   display: flex;
   flex-direction: column;
   gap: u.rem(10);
+  position: relative;
+
+  label {
+    font-weight: 700;
+    font-size: u.rem(14);
+    color: u.color(subTitle);
+  }
 
   span {
     width: 100%;
     display: flex;
     align-items: center;
     gap: u.rem(7);
+    position: relative;
+
+    // p.input__error {
+    //   position: absolute;
+    //   right: u.rem(30);
+    //   color: g.$red;
+    // }
   }
 }
 
@@ -27,9 +41,14 @@ input, textarea, select {
   }
 }
 
-input.isEmpty {
+.isEmpty input{
   border: u.rem(2) solid g.$red;
 }
+
+input.disable {
+  opacity: 0.3;
+}
+
 
 textarea {
   resize: none;
@@ -40,4 +59,12 @@ textarea {
   width: 100%;
   display: flex;
   flex-direction: column;
+}  
+p.input__error {
+  position: absolute;
+  right: u.rem(25);
+  color: g.$red;
+  bottom: u.rem(8);
+  font-size: u.rem(12);
+  font-weight: 700;
 }

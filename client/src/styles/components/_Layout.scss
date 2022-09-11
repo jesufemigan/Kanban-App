@@ -165,7 +165,7 @@ header {
 
 main {
   height: calc(100vh - u.rem(100));
-  width: 100%;
+  min-width: 100%;
   
   
   position: relative;
@@ -175,7 +175,26 @@ main {
   @include u.breakpoint(medium) {
     display: flex;
     gap: u.rem(40);
+  }
 
+  .showSideBar {
+
+    @include u.breakpoint(medium) {
+
+      position: absolute;
+      z-index: 10;
+      bottom: 5%;
+      background-color: g.$darkBlue;
+  
+      padding: u.rem(10) u.rem(20);
+      border-radius: 0 u.rem(40) u.rem(40) 0;
+  
+      img {
+        width: u.rem(20);
+      }
+
+      cursor: pointer;
+    }
   }
 }
 
@@ -238,6 +257,10 @@ main {
 
   @include u.breakpoint(medium) {
     transform: translateX(0);
+    &.mainHide {
+      left: 0;
+    }
+    
   }
 }
 
