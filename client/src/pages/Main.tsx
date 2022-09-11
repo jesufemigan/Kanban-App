@@ -13,7 +13,8 @@ const Main = () => {
 
   useEffect(() => {
     dispatch(getAllBoards())
-  }, [])
+    // changeBoardId(boards[0]._id)
+  }, [dispatch])
 
   return (
     <>

@@ -1,5 +1,4 @@
 import { createSlice } from "@reduxjs/toolkit"
-
 interface IState {
   boardId: string
   task: any

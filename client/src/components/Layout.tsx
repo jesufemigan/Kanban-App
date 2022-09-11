@@ -5,7 +5,6 @@ import desktopLogoDark from '../assets/logo-dark.svg';
 import mobileLogo from '../assets/logo-mobile.svg';
 import iconAddTask from '../assets/icon-add-task-mobile.svg';
 import verticalEllipsis from '../assets/icon-vertical-ellipsis.svg';
-import iconAdd from '../assets/icon-add-task-mobile.svg';
 import showSideBar from '../assets/icon-show-sidebar.svg';
 import Column from "./Column";
 
@@ -53,7 +52,7 @@ const Layout = () => {
           <img src={theme === 'light' ? desktopLogoLight : desktopLogoDark} alt="" id="desktopLogo"/>
         </div>
         <div className="boardTitle">
-          <h1>{currentBoard?.title || 'No Board Found'}</h1>
+          <h1>{currentBoard ? currentBoard?.title || 'No Board Found' : 'Home'}</h1>
           <span onClick={() => setIsMobile(prev => !prev)} style={{ transform: isMobile ? 'rotate(180deg)': ''}}>
           <svg width="10" height="7" xmlns="http://www.w3.org/2000/svg"><path stroke="#635FC7" stroke-width="2" fill="none" d="m1 1 4 4 4-4"></path></svg>
           </span>
@@ -61,7 +60,7 @@ const Layout = () => {
             <SideBar />
           </div>
         </div>
-        {boards.length > 0 && <div className="actionHeader">
+        {boards.length > 0 && currentBoard && <div className="actionHeader">
           <button onClick={() => dispatch(openModal("AddTask"))}>
             <span>
               <img src={iconAddTask} alt="" />
@@ -90,7 +89,7 @@ const Layout = () => {
         <div className="sideBarPos">
           <SideBar hide={hide} setHide={setHide}/>
         </div>
-        {boards.length > 0 ? (<div className={`column__container ${hide ? 'mainHide' : ''}`}>
+        {boards.length > 0 && currentBoard ? (<div className={`column__container ${hide ? 'mainHide' : ''}`}>
           {currentBoard?.columns.map(column => (
             <Column title={column.title} tasks={column!.tasks} key={column._id}/>
           ))}
@@ -99,12 +98,18 @@ const Layout = () => {
               <h1>+ New Column</h1>
             </span>
           </div>
-        </div>) : (
+        </div>) : boards.length === 0 && (
           <div className="noBoard">
             <div className="noBoard__container">
               <p>You have no board yet. Create a new board to get started</p>
               <button onClick={() => dispatch(openModal("NewBoard"))}>+ Add New Board</button>
             </div>
+          </div>
+        )}
+        {!currentBoard && (
+          <div className="initialBoard">
+            <p>Choose the board you want to see or create a new one</p>
+            <button className="btn secondary-btn" onClick={() => dispatch(openModal("NewBoard"))}>+ Add New Board</button>
           </div>
         )}
         {hide && <div className="showSideBar" onClick={() => setHide(prev => !prev)}><img src={showSideBar} alt="" /></div>}

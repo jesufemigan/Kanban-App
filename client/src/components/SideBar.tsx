@@ -18,14 +18,6 @@ const SideBar: React.FC<{hide?:any, setHide?:React.Dispatch<React.SetStateAction
 
   const dispatch = useAppDispatch()
 
-  useEffect(() => {
-    if (boards.length > 0) {
-      dispatch(changeBoardId(boards[0]._id))
-    }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [boards])
-
-  
   return (
     <div className={`sideBar ${hide ? 'hide' : ''}`}>
       <div className="allBoards">
@@ -55,6 +47,9 @@ const SideBar: React.FC<{hide?:any, setHide?:React.Dispatch<React.SetStateAction
             </label>
           </div>
           <img src={iconLightTheme} alt="" />
+        </div>
+        <div className="logout-btn">
+          <button className='btn secondary-btn'>Logout</button>
         </div>
         <div className="sideBarAction" onClick={() => {if (setHide) setHide(prev => !prev)}}>
           <img src={iconHide} alt="" />
