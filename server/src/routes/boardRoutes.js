@@ -1,0 +1,10 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const boardController_1 = require("../controllers/boardController");
+const authMiddleware_1 = require("../middlewares/authMiddleware");
+const boardRoutes = (0, express_1.Router)();
+boardRoutes.route('/').get(authMiddleware_1.protect, boardController_1.getAllBoard);
+boardRoutes.route('/').post(authMiddleware_1.protect, boardController_1.addNewBoard);
+boardRoutes.route('/:board_id').delete(authMiddleware_1.protect, boardController_1.deleteBoard).patch(authMiddleware_1.protect, boardController_1.editBoard);
+exports.default = boardRoutes;
