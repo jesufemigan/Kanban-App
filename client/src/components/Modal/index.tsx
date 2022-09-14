@@ -11,7 +11,7 @@ import { useAppSelector } from "../../app/hooks"
 
 const Index = () => {
   const { modalType } = useAppSelector(state => state.modal)
-  const { task } = useAppSelector(state => state.ids)
+  // const { task } = useAppSelector(state => state.ids)
   
   return (
     <>
@@ -22,7 +22,7 @@ const Index = () => {
       {modalType === 'NewColumn' && <NewColumn />}
       {modalType === 'DeleteBoard' && <DeleteBoard />}
       {modalType === 'DeleteTask' && <DeleteTask />}
-      {modalType === 'TaskDetails' && <TaskDetails task={task}/>}
+      {modalType === 'TaskDetails' && <TaskDetails />}
       
     </>
   )

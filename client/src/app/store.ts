@@ -4,13 +4,15 @@ import boardReducer from '../features/board/boardSlice';
 import authReducer from '../features/auth/authSlice';
 import boardIdReducer from '../features/currentBoardReducer';
 import themeReducer from '../features/themeReducer';
+import progressBarReducer from '../features/progressBarReducer';
 export const store = configureStore({
   reducer: {
     modal: modalReducer,
     auth: authReducer,
     board: boardReducer,
     ids: boardIdReducer,
-    theme: themeReducer
+    theme: themeReducer,
+    progress: progressBarReducer
   }
 })
 

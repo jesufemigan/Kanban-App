@@ -1,6 +1,6 @@
 import React from "react"
-import { useAppDispatch } from '../app/hooks';
-import {changeTask} from '../features/currentBoardReducer'
+import { useAppDispatch, useAppSelector } from '../app/hooks';
+import {changeTask } from '../features/currentBoardReducer'
 import {openModal} from '../features/modal/modalSlice'
 
 interface ITaskProps {
@@ -19,6 +19,9 @@ const Task: React.FC<ITaskProps> = ({ title, subtasks, task }) => {
   }
 
   const completedSubtask = task.subtasks.filter((sub:any) => sub.isCompleted).length
+  // const allSubtasks = useAppSelector(state => getAllSubtasks(state.ids))
+  // const completedSubTask = allSubtasks.filter((sub:any) => sub.isCompleted)
+  // console.log(allSubtasks)
   const totalSubtask = task.subtasks.length
   return (
     <div className="task" onClick={handleOpenTask}>

@@ -17,7 +17,7 @@ export const addTask = expressAsyncHandler(async (req: Request, res:Response) =>
   column?.tasks.push({ title, description, subtasks, status })
   // board.save()
   await board.save()
-  const allBoard = await Board.find({id: req.userId})
+  const allBoard = await Board.find({userId: req.userId})
   res.status(200).json(allBoard)
 })
 
@@ -39,7 +39,7 @@ export const editTask = expressAsyncHandler(async (req:Request, res:Response) =>
   taskToUpdate!.subtasks = subtasks
 
   await board.save()
-  const allBoard = await Board.find({ id: req.userId })
+  const allBoard = await Board.find({ userId: req.userId })
 
   res.status(200).json(allBoard)
 })
@@ -59,7 +59,7 @@ export const updateSubTask: RequestHandler = expressAsyncHandler(async (req:Requ
 
   await board.save()
 
-  const allBoard = await Board.find({id: req.userId})
+  const allBoard = await Board.find({userId: req.userId})
 
   res.status(200).json(allBoard)
 })
@@ -79,7 +79,7 @@ export const deleteTask: RequestHandler = expressAsyncHandler(async (req: Reques
   columnToUpdate!.tasks!.splice(taskIndex, 1)
 
   await board.save()
-  const allBoard = await Board.find({id:req.userId})
+  const allBoard = await Board.find({userId:req.userId})
 
   res.status(200).json(allBoard)
 })

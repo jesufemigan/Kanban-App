@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const API_URL = 'http://localhost:5000/api/boards/'
+const API_URL = '/api/boards/'
 
 const getAllBoards = async (token: string) => {
   const config = {

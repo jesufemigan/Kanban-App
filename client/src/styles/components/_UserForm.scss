@@ -30,6 +30,14 @@
     flex-direction: column;
     gap: u.rem(20);
 
+    h1 {
+      color: u.color(subTitle);
+    }
+
+    p {
+      color: g.$mediumGray;
+    }
+
     button {
       width: 100%;
     }

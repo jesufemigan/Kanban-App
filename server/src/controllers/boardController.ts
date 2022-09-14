@@ -4,7 +4,7 @@ import Board from '../models/boardModel';
 
 
 export const getAllBoard: RequestHandler = expressAsyncHandler(async (req: Request, res: Response) => {
-  const boards = await Board.find({id: req.userId})
+  const boards = await Board.find({userId: req.userId})
   res.status(200).json(boards)
 })
 
@@ -25,7 +25,7 @@ export const editBoard: RequestHandler = expressAsyncHandler(async (req: Request
   const { title, columns } = req.body
 
   await Board.findByIdAndUpdate(board_id, { title, columns }, { new: true })
-  const allBoard = await Board.find({id: req.userId})
+  const allBoard = await Board.find({userId: req.userId})
 
   res.status(200).json(allBoard)
 })
@@ -33,7 +33,7 @@ export const editBoard: RequestHandler = expressAsyncHandler(async (req: Request
 export const deleteBoard: RequestHandler = expressAsyncHandler(async (req:Request, res:Response) => {
   const { board_id } = req.params
   await Board.findByIdAndDelete(board_id)
-  const allBoard = await Board.find({id:req.userId})
+  const allBoard = await Board.find({userId:req.userId})
 
   res.json(allBoard)
 })

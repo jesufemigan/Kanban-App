@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = 'http://localhost:5000/api/boards/task/'
+const API_URL = '/api/boards/task/'
 
 const addNewTask = async (token:string, boardId:string, taskDetails:any) => {
   const config = {

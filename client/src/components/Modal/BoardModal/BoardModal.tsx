@@ -1,45 +1,29 @@
 import Modal from "../Modal"
 import deleteButton from '../../../assets/icon-cross.svg';
-import { useState } from "react";
 import { nanoid } from "@reduxjs/toolkit";
 
-import { useForm, useFieldArray, SubmitHandler } from 'react-hook-form'
+import { useForm, useFieldArray } from 'react-hook-form'
 
 import { useAppDispatch, useAppSelector } from "../../../app/hooks";
 import { createNewBoard, editBoard } from "../../../features/board/boardSlice";
 import { closeModal } from "../../../features/modal/modalSlice";
+import { setProgress } from "../../../features/progressBarReducer";
+import { useEffect } from "react";
 
 
 const BoardModal: React.FC<{title: string, buttonName: string, edit?: boolean, noName?:boolean}> = ({ title, buttonName, edit, noName }) => {
   const { boardId } = useAppSelector(state => state.ids)
-  const { boards } = useAppSelector(state => state.board)
+  const { boards, isLoading } = useAppSelector(state => state.board)
   const currentBoard = boards.find(board => board._id === boardId)
   
-  const [columns, setColumns] = useState([{
-    _id: nanoid(),
-    title: ''
-  }])
-
-  const [editColumns, setEditColumns] = useState<any>(currentBoard?.columns)
-  const [boardName, setBoardName] = useState(edit ? currentBoard?.title : '')
-
-  const handleRemove = (id: any) => {
-    if (edit) {
-      setEditColumns((prev:any[]) => prev.filter(prev => prev._id !== id))
-    }
-    setColumns(prev => prev.filter(prev => prev._id !== id))
-  }
-
+  
   const dispatch = useAppDispatch()
 
-  const getColumns = edit ? editColumns.map((a:any) => {
-    return {
-      title: a.title,
-      tasks: a.tasks
+  useEffect(() => {
+    if (isLoading) {
+      dispatch(setProgress())
     }
-  }) : columns.map(a => {
-    return {title: a.title}
-  })
+  }, [isLoading, dispatch])
 
   const handleBoard = (data: any) => {
     const { title, columns } = data
@@ -55,43 +39,6 @@ const BoardModal: React.FC<{title: string, buttonName: string, edit?: boolean, n
     dispatch(closeModal())
   }
 
-  const handleNameChange = (e:any) => {
-    setBoardName(e.target.value)
-  }
-
-  const handleOnChange = (e:any, id:any) => {
-    
-    const newName = e.target.value
-    if (edit) {
-      // eslint-disable-next-line array-callback-return
-      setEditColumns((prev:any[]) => prev.map((p:any) => {
-        if (p._id === id) {
-          return {
-            ...p,
-            title: newName
-          }
-        }
-        return p
-      }))
-    }
-    setColumns(prev => prev.map(p => {
-      if (p._id === id) {
-        return {
-          ...p,
-          title: newName
-        }
-      }
-      return p
-    }))
-    
-  }
-
-  const handleNewColumns = () => {
-    if (edit) {
-      setEditColumns((prev:any[]) => [...prev, {_id: nanoid(), title: ''}])
-    }
-    setColumns(prev => [...prev, {_id: nanoid(), title: ''}])
-  }
 
   const { register, watch, control, formState: { errors }, handleSubmit } = useForm({
     defaultValues: {
@@ -139,18 +86,17 @@ const BoardModal: React.FC<{title: string, buttonName: string, edit?: boolean, n
             {errors.columns?.type === 'validate' && <p className="input__error">Used</p>}
         </span>
       </div>
-      {/* <Inputs name="Column" type="text" inputArray={edit ? editColumns : columns} handleRemove={handleRemove} onChange={handleOnChange}/> */}
       <div className="input">
           <label htmlFor="">Columns</label>
           {controlledFields.map((obj: any, index:any) => (
             <span key={obj._id} className={errors.columns?.[index]?.title && 'isEmpty'}>
-            <input
-              defaultValue={obj.title} 
-              {...register(`columns.${index}.title`, {
-                validate: (value) => {if (!edit) return hasDuplicate(value, index, watchFieldArray)},
-                required: true
-              })}
-            />
+              <input
+                defaultValue={obj.title} 
+                {...register(`columns.${index}.title`, {
+                  validate: (value) => {if (!edit) return hasDuplicate(value, index, watchFieldArray)},
+                  required: true
+                })}
+              />
               {errors.columns?.[index]?.title?.type === 'validate' && <p className="input__error">Used</p>}
               {errors.columns?.[index]?.title?.type === 'required' && <p className="input__error">Required</p>}
             {controlledFields.length > 1 && (

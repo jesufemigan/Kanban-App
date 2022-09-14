@@ -1,15 +1,18 @@
 import Inputs from "./Inputs"
 import { GoogleLogin } from 'react-google-login'
+import { gapi } from 'gapi-script'
 import logo from '../assets/logo-mobile.svg'
 import { Link } from "react-router-dom"
-import { ChangeEvent, FormEvent } from "react"
+import { ChangeEvent, FormEvent, useEffect } from "react"
 
 import { useState } from "react"
-import { useAppDispatch } from "../app/hooks"
-import { login, register } from "../features/auth/authSlice"
+import { useAppDispatch, useAppSelector } from "../app/hooks"
+import { googleLogin, login, register, reset } from "../features/auth/authSlice"
 import { useNavigate } from "react-router-dom"
+import { setProgress } from "../features/progressBarReducer"
 
 const UserForm:React.FC<{name:string,signUp?:boolean}> = ({name, signUp}) => {
+  const { user, isLoading } = useAppSelector(state => state.auth)
   const [userData, setUserData] = useState({
     name: '',
     email: '',
@@ -28,6 +31,25 @@ const UserForm:React.FC<{name:string,signUp?:boolean}> = ({name, signUp}) => {
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
 
+  useEffect(() => {
+    if (user && user.name) {
+      navigate('/')
+    }
+
+    if (isLoading) {
+      dispatch(setProgress())
+    }
+    dispatch(reset())
+  }, [user, navigate, dispatch, isLoading])
+
+  const clientId = "939999495285-dm64unilovi7uq8ti4pf9p1i1hgd8jqe.apps.googleusercontent.com"
+
+  useEffect(() => {
+    gapi.load("client:auth2", () => {
+      gapi.auth2.init({ clientId })
+    })
+  },[])
+
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault()
 
@@ -36,7 +58,23 @@ const UserForm:React.FC<{name:string,signUp?:boolean}> = ({name, signUp}) => {
     } else {
       dispatch(login(userData))
     }
-    navigate('/')
+  }
+
+  const googleSuccess = async (res:any) => {
+    const user = {
+      name: res.profileObj.givenName,
+      email: res.profileObj.email,
+      token: res.tokenId
+    }
+    localStorage.setItem('user', JSON.stringify(user))
+
+    dispatch(googleLogin(user))
+    dispatch(setProgress())
+  }
+
+  const googleFailure = (error:any) => {
+    console.log(error)
+    console.log('google sign in was unsuccessful')
   }
 
   
@@ -55,8 +93,10 @@ const UserForm:React.FC<{name:string,signUp?:boolean}> = ({name, signUp}) => {
           {!signUp && (
             <GoogleLogin 
               buttonText="Sign in with your google account"
-              clientId=""
+              clientId={clientId}
               cookiePolicy="single_host_origin"
+              onSuccess={googleSuccess}
+              onFailure={googleFailure}
             />
           )}
           {signUp ? (

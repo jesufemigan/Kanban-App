@@ -11,7 +11,6 @@ import Column from "./Column";
 import { openModal } from "../features/modal/modalSlice";
 import { useEffect, useRef, useState } from "react";
 import { useAppSelector, useAppDispatch } from "../app/hooks";
-import { changeBoardId } from "../features/currentBoardReducer";
 
 const Layout = () => {
   const dispatch = useAppDispatch()
@@ -98,7 +97,7 @@ const Layout = () => {
               <h1>+ New Column</h1>
             </span>
           </div>
-        </div>) : boards.length === 0 && (
+        </div>) : boards.length === 0 && !currentBoard && (
           <div className="noBoard">
             <div className="noBoard__container">
               <p>You have no board yet. Create a new board to get started</p>
@@ -106,7 +105,7 @@ const Layout = () => {
             </div>
           </div>
         )}
-        {!currentBoard && (
+        {!currentBoard && boards.length > 0 && (
           <div className="initialBoard">
             <p>Choose the board you want to see or create a new one</p>
             <button className="btn secondary-btn" onClick={() => dispatch(openModal("NewBoard"))}>+ Add New Board</button>

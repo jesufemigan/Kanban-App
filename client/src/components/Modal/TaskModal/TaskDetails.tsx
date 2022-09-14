@@ -4,29 +4,28 @@ import { useAppSelector, useAppDispatch } from "../../../app/hooks"
 import { openModal } from "../../../features/modal/modalSlice"
 import { useEffect, useRef, useState } from 'react'
 import { updateSubTask } from "../../../features/board/boardSlice"
+import Subtask from "../../Subtask"
+// import { getAllSubtasks } from "../../../features/currentBoardReducer"
 
-const TaskDetails:React.FC<{task:any}> = ({ task }) => {
+const TaskDetails:React.FC = () => {
+  
   const { boardId } = useAppSelector(state => state.ids)
   const { boards } = useAppSelector(state => state.board)
-
-  const completedSubTask = task.subtasks.filter((sub:any) => sub.isCompleted).length
-  const totalSubTask = task.subtasks.length
+  const { task } = useAppSelector(state => state.ids)
+  
+  const [newTask, setNewTask] = useState(task)
+  
+  const completedSubTask = newTask.subtasks.filter((sub:any) => sub.isCompleted).length 
+  const totalSubTask = newTask.subtasks.length
 
   const [dropDown, setDropDown] = useState(false)
+  // const [completeSubTask, setCompleteSubTask] = useState(false)
 
   const dispatch = useAppDispatch()
 
   const currentBoard = boards.find(board => board._id === boardId)
-
-  const handleSubTaskChange = (id:any) => {
-    const details = {
-      status: task.status,
-      taskId: task._id,
-      subId: id
-    }
-
-    dispatch(updateSubTask(details))
-  }
+  // const allSubtasks = useAppSelector(state => getAllSubtasks(state.ids))
+  // const completedSubTask = allSubtasks.filter((sub:any) => sub.isCompleted)
 
   const taskRef = useRef<any>(null)
   useEffect(() => {
@@ -41,11 +40,13 @@ const TaskDetails:React.FC<{task:any}> = ({ task }) => {
       document.removeEventListener('mousedown', handleClickOutside)
     }
   }, [taskRef])
+
+  
   return (
     <Modal>
       <div className="taskDetails">
         <div className="taskDetails__header">
-          <h2>{task.title}</h2>
+          <h2>{newTask.title}</h2>
           <div className="taskDetails__action--container">
             <img src={ellipsis} alt="" onClick={() => setDropDown(prev => !prev)}/>
             <div className={`taskDetails__action--content ${!dropDown ? `cancel` : ''}`} ref={taskRef}>
@@ -54,26 +55,20 @@ const TaskDetails:React.FC<{task:any}> = ({ task }) => {
             </div>
           </div>
         </div>
-        <p className="taskDetails__description">{task.description === "" ? 'No description' : task.description}</p>
+        <p className="taskDetails__description">{newTask.description === "" ? 'No description' : task.description}</p>
         <p className="taskDetails__subtasks">Subtasks ({completedSubTask} of {totalSubTask})</p>
         <div className="allSubtasks">
-          {task.subtasks.length  === 0 ? (
+          {newTask.subtasks.length  === 0 ? (
             <p>No subtasks</p>
           ) : (
-            task.subtasks.map((sub:any) => (
-              <div key={sub._id} className="allSubtasks__each">
-                <label className="checkbox">
-                  {sub.title}
-                  <input type="checkbox" checked={sub.isCompleted} onChange={() => handleSubTaskChange(sub._id)}/>
-                  <span className="checkmark"></span>
-                </label>
-              </div>
+            newTask.subtasks.map((sub:any, index:number) => (
+             <Subtask sub={sub} key={sub._id} setNewTask={setNewTask} newTask={newTask} index={index}/>
             ))
           )}
         </div>
         <div className="dropDown">
           <label htmlFor="">Current Status</label>
-          <select name="columns" id="" value={task.status}>
+          <select name="columns" id="" value={task.status} disabled>
             {currentBoard?.columns.map(column => (
               <option value={column.title} key={column._id}>{column.title}</option>
             ))}

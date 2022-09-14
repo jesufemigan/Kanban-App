@@ -12,7 +12,6 @@ const ModalDelete:React.FC<{isTask?: boolean, title:string}> = ({ isTask, title 
     task_id: _id,
     status
   }
-  console.log(details)
   return (
     <Modal>
       <div className="deleteModal">

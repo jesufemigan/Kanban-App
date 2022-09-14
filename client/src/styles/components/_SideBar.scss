@@ -67,14 +67,20 @@
     gap: u.rem(15);
     padding: u.rem(10) u.rem(20);
     padding-left: u.rem(40);
-    border-radius: 0 u.rem(20) u.rem(20) 0;
+    border-radius: 0 u.rem(30) u.rem(30) 0;
 
     cursor: pointer;
 
     &:hover:not(.active) {
       background-color: g.$lightBlue;
       color: white;
+
+      svg path {
+        fill: white;
+      }
     }
+    
+    
   }
 
   display: flex;
@@ -88,6 +94,12 @@
   .active {
     background-color: g.$darkBlue;
     color: white;
+  }
+}
+
+span.active svg {
+  path {
+    fill: white;
   }
 }
 
@@ -202,6 +214,12 @@
 
 .sideBarAction {
   display: none;
+
+  p {
+    color: u.color(subTitle);
+    font-weight: 700;
+    font-size: u.rem(18);
+  }
 
   @include u.breakpoint(medium) {
     display: flex;

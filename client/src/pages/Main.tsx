@@ -1,20 +1,33 @@
 import Layout from "../components/Layout"
 import Modal from "../components/Modal"
 
-import { getAllBoards } from "../features/board/boardSlice"
+import { getAllBoards, resetBoard } from "../features/board/boardSlice"
+import { reset } from "../features/auth/authSlice"
 import { useAppDispatch, useAppSelector } from "../app/hooks"
 import { useEffect } from 'react'
-import { changeBoardId } from "../features/currentBoardReducer"
+import { useNavigate } from "react-router-dom"
+import { setProgress } from "../features/progressBarReducer"
+
 
 const Main = () => {
   const dispatch = useAppDispatch()
+  const navigate = useNavigate()
 
-  const { boards } = useAppSelector(state => state.board)
+  const { user, isLoading } = useAppSelector(state => state.auth)
 
   useEffect(() => {
-    dispatch(getAllBoards())
-    // changeBoardId(boards[0]._id)
-  }, [dispatch])
+    if (!user) {
+      navigate('/login')
+    }
+
+    if (user && user.name) {
+      dispatch(getAllBoards())
+    }
+
+    dispatch(reset())
+    dispatch(resetBoard())
+  }, [dispatch, navigate, user, isLoading])
+
 
   return (
     <>

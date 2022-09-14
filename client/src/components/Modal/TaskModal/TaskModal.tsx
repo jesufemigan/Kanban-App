@@ -1,66 +1,31 @@
 import Modal from "../Modal"
-import Inputs from "../../Inputs";
-
 import deleteButton from '../../../assets/icon-cross.svg';
 
-import { useState, useRef } from 'react'
+import { useEffect, useRef } from 'react'
 import { nanoid } from "@reduxjs/toolkit";
 
 import { addNewTask, editTask } from "../../../features/board/boardSlice";
 import { useAppDispatch, useAppSelector } from "../../../app/hooks";
 import { closeModal } from "../../../features/modal/modalSlice";
 
-import { useForm, useFieldArray, SubmitHandler } from 'react-hook-form'
-import { Value } from "sass";
+import { useForm, useFieldArray } from 'react-hook-form'
+import { setProgress } from "../../../features/progressBarReducer";
+
 
 const TaskModal:React.FC<{title:string, buttonName: string, edit?: boolean}> = ({ title, buttonName, edit }) => {
   const { boardId, task } = useAppSelector(state => state.ids)
-  const { boards } = useAppSelector(state => state.board)
-  const [taskName, setTaskName] = useState(edit ? task.title : '')
-  const [description, setDescription] = useState(edit ? task.description : '')
-  const [subTasks, setSubTasks] = useState(edit ? task.subtasks : [{
-    _id: nanoid(),
-    title: ''
-  }])
+  const { boards, isLoading } = useAppSelector(state => state.board)
   const statusRef = useRef<HTMLSelectElement>(null)
 
   const currentBoard = boards.find(board => board._id === boardId)
   
-  const handleNameChange = (e:any) => {
-    setTaskName(e.target.value)
-  }
-  const handleDescriptionChange = (e: any) => {
-    setDescription(e.target.value)
-  }
-  const handleRemove = (id: any) => {
-    setSubTasks((prev:any) => prev.filter((prev:any) => prev._id !== id))
-  }
-  const handleOnChange = (e:any, id:any) => {
-    
-    const newName = e.target.value
-    setSubTasks((prev:any) => prev.map((p:any) => {
-      if (p._id === id) {
-        return {
-          ...p,
-          title: newName
-        }
-      }
-      return p
-    }))
-    
-  }
-
-  
   const dispatch = useAppDispatch()
 
-  const getSubtasks = subTasks.map((a:any) => {
-    return {title: a.title}
-  })
-
-  const [isNameEmpty, setIsNameEmpty] = useState('')
-  const [isSubtaskEmpty, setIssubtaskEmpty] = useState('')
-
-
+  useEffect(() => {
+    if (isLoading) {
+      dispatch(setProgress())
+    }
+  }, [dispatch, isLoading])
 
   
   const handleCreateNewTask = (data:any) => {
@@ -114,8 +79,6 @@ const TaskModal:React.FC<{title:string, buttonName: string, edit?: boolean}> = (
   return (
     <Modal>
       <h1>{title}</h1>
-        {/* <Inputs name="Title" type="text" onChange={handleNameChange} value={taskName} isEmpty={isNameEmpty} key={isNameEmpty}/> */}
-        {/* <Inputs name="Title" type="text" onChange={handleNameChange} value={taskName} isEmpty={isNameEmpty} key={isNameEmpty} register={register}/> */}
         <div className="input">
           <label htmlFor="">Title</label>
           <span className={errors.title && 'isEmpty'}>
@@ -135,7 +98,6 @@ const TaskModal:React.FC<{title:string, buttonName: string, edit?: boolean}> = (
             {...register('description')}
           />
         </div>
-        {/* <Inputs name="Subtasks" type="text" inputArray={subTasks} handleRemove={handleRemove} onChange={handleOnChange} isEmpty={isSubtaskEmpty} key={isSubtaskEmpty}/> */}
         <div className="input">
           <label htmlFor="">Subtasks</label>
           {controlledFields.map((obj: any, index:any) => (

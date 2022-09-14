@@ -143,6 +143,7 @@ export const deleteTask = createAsyncThunk('board/task/delete', async(details:an
   }
 })
 
+
 export const boardSlice = createSlice({
   name: 'board',
   initialState,

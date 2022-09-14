@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import authService from "./authService";
 import { IUserData } from "./authService";
 
-const user = (localStorage.getItem('user'))
+const user = localStorage.getItem('user')
 
 const initialState = {
   user: user ? JSON.parse(user) : null,
@@ -30,6 +30,10 @@ export const login = createAsyncThunk('auth/login', async (user: IUserData, thun
   }
 })
 
+export const logout = createAsyncThunk('auth/logout', async () => {
+ authService.logout()
+})
+
 
 export const authSlice = createSlice({
   name: 'auth',
@@ -40,6 +44,9 @@ export const authSlice = createSlice({
       state.isError = false
       state.message = ''
       state.isSuccess = false
+    },
+    googleLogin: (state, action) => {
+      state.user = action.payload
     }
   },
   extraReducers(builder) {
@@ -70,8 +77,11 @@ export const authSlice = createSlice({
           state.message = action.payload as string
           state.isError = true
         })
+        .addCase(logout.fulfilled, (state) => {
+          state.user = null
+        })
   },
 })
 
-export const { reset } = authSlice.actions
+export const { reset, googleLogin } = authSlice.actions
 export default authSlice.reducer
