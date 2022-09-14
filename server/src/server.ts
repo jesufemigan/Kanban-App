@@ -9,7 +9,6 @@ import { errorHandler } from './middlewares/errorMiddleware';
 import cors from 'cors'
 import path from 'path';
 
-
 connectDB()
 const app = express()
 
