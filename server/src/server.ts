@@ -1,6 +1,6 @@
 import dotenv from 'dotenv'
 dotenv.config()
-import express from 'express'
+import express, { Response, Request } from 'express'
 import { connectDB } from './config/db';
 import boardRoutes  from './routes/boardRoutes'
 import taskRoutes  from './routes/taskRoutes'
@@ -24,10 +24,10 @@ app.use('/api/user', userRoutes)
 if (process.env.NODE_ENV === 'production') {
   app.use(express.static(path.join(__dirname, '../../client/build')))
 
-  app.get('*', (req, res) => res.sendFile(path.resolve(__dirname, '../../', 'client', 'build', 'index.html')))
+  app.get('*', (req:Request, res:Response) => res.sendFile(path.resolve(__dirname, '../../', 'client', 'build', 'index.html')))
 }
 else {
-  app.get('/', (req, res) => res.send('Please set to production'))
+  app.get('/', (req:Request, res:Response) => res.send('Please set to production'))
 }
 
 app.use(errorHandler)
