@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node server/dist/server.js",
+    "start": "node server/dist/server",
     "dev": "nodemon server/src/server.ts",
     "build": "npm install && tsc"
   },
