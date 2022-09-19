@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node server/dist/server",
     "dev": "nodemon server/src/server.ts",
-    "build": "tsc"
+    "build": "npm install && tsc"
   },
   "keywords": [],
   "author": "",
