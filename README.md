@@ -1,11 +1,14 @@
 # A Full Stack Task Management App
 
-
 ## Screenshot
 
 ![SignUp Page](./main1.png)
-![](./main2.png)
-![](./main3.png)
+![Main-light](./main2.png)
+![Main-dark](./main3.png)
+![new board](./main4.png)
+![new task](./main5.png)
+![another main](./main6.png)
+![delete modal](./main7.png)
 
 ## An App that allows users to:
 
