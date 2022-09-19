@@ -9,6 +9,7 @@ export const addTask = expressAsyncHandler(async (req: Request, res:Response) =>
   const board = await Board.findById(board_id)
 
   if (!board) {
+    res.status(404)
     throw new Error("Board does not exist")
   }
 
@@ -28,6 +29,7 @@ export const editTask = expressAsyncHandler(async (req:Request, res:Response) =>
   const board = await Board.findById(board_id)
 
   if (!board) {
+    res.status(404)
     throw new Error("Board does not exist")
   }
 
@@ -50,6 +52,7 @@ export const updateSubTask: RequestHandler = expressAsyncHandler(async (req:Requ
   const board = await Board.findById(board_id)
 
   if (!board) {
+    res.status(404)
     throw new Error("Board does not exist")
   }
   
@@ -70,6 +73,7 @@ export const deleteTask: RequestHandler = expressAsyncHandler(async (req: Reques
   const board = await Board.findById(board_id)
 
   if (!board) {
+    res.status(404)
     throw new Error("Board does not exist")
   }
   const columnToUpdate = board.columns.find(column => column.title === status)

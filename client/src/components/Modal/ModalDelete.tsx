@@ -19,7 +19,7 @@ const ModalDelete:React.FC<{isTask?: boolean}> = ({ isTask }) => {
     <Modal>
       <div className="deleteModal">
         <h3>Delete this {modalName}?</h3>
-        <p>Are you sure you want to delete the '{isTask ? task?.title : currentBoard?.title}' {modalName}? This action will remove all columns and tasks and cannot be reversed </p>
+        <p>Are you sure you want to delete the '{isTask ? task?.title : currentBoard?.title}'? This action will remove all columns and tasks and cannot be reversed </p>
 
         <div>
           <button className="btn danger-btn" onClick={() => {

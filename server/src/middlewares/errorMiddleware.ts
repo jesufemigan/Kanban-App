@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from "express";
+import type { ErrorRequestHandler } from 'express'
 
-export const errorHandler = (err: any, 
+export const errorHandler: ErrorRequestHandler = (err: any, 
                                 req: Request, 
                                 res: Response, 
                                 next: NextFunction) => {

@@ -16,9 +16,9 @@ app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 app.use(cors())
 
+app.use('/api/user', userRoutes)
 app.use('/api/boards', boardRoutes)
 app.use('/api/boards/task', taskRoutes)
-app.use('/api/user', userRoutes)
 
 // Serve Frontend
 if (process.env.NODE_ENV === 'production') {

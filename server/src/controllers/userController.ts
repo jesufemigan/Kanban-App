@@ -10,6 +10,7 @@ export const userSignup: RequestHandler = expressAsyncHandler(async (req: Reques
   const user = await User.findOne({email})
 
   if (user) {
+    res.status(404)
     throw new Error("User already exists")
   }
 
@@ -38,6 +39,7 @@ export const userSignin: RequestHandler = expressAsyncHandler(async (req:Request
   const user = await User.findOne({email})
 
   if (!user) {
+    res.status(404)
     throw new Error("User does not exist")
   }
 
@@ -51,7 +53,7 @@ export const userSignin: RequestHandler = expressAsyncHandler(async (req:Request
     })
   }
   else {
-    res.statusCode = 400
+    res.status(400)
     throw new Error("Incorrect Password")
   }
 })
