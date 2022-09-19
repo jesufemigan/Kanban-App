@@ -7,7 +7,7 @@
     "start": "node server/dist/server",
     "dev": "nodemon server/src/server.ts",
     "client": "npm run build --prefix client",
-    "build": "npm install && tsc && npm run client"
+    "build": "npm install && tsc"
   },
   "keywords": [],
   "author": "",
