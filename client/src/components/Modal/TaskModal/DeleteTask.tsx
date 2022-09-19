@@ -2,7 +2,7 @@ import ModalDelete from "../ModalDelete"
 
 const DeleteTask = () => {
   return (
-    <ModalDelete title="New Task" isTask/>
+    <ModalDelete isTask/>
   )
 }
 export default DeleteTask

@@ -3,20 +3,23 @@ import { deleteBoard, deleteTask } from "../../features/board/boardSlice"
 import { useAppDispatch, useAppSelector } from "../../app/hooks"
 import { closeModal } from "../../features/modal/modalSlice"
 
-const ModalDelete:React.FC<{isTask?: boolean, title:string}> = ({ isTask, title }) => {
+const ModalDelete:React.FC<{isTask?: boolean}> = ({ isTask }) => {
   const modalName = isTask ? 'task' : 'board'
   const dispatch = useAppDispatch()
-  const { task } = useAppSelector(state => state.ids)
+  const { task, boardId } = useAppSelector(state => state.ids)
+  const { boards } = useAppSelector(state => state.board)
   const { status, _id } = task
   const details = {
     task_id: _id,
     status
   }
+
+  const currentBoard = boards.find(board => board._id === boardId)
   return (
     <Modal>
       <div className="deleteModal">
         <h3>Delete this {modalName}?</h3>
-        <p>Are you sure you want to delete the '{title}' {modalName}? This action will remove all columns and tasks and cannot be reversed </p>
+        <p>Are you sure you want to delete the '{isTask ? task?.title : currentBoard?.title}' {modalName}? This action will remove all columns and tasks and cannot be reversed </p>
 
         <div>
           <button className="btn danger-btn" onClick={() => {
