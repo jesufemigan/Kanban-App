@@ -5,6 +5,8 @@ import Signin from './pages/SignIn';
 import SignUp from './pages/SignUp';
 import LoadingBar from 'react-top-loading-bar';
 import { resetProgress } from './features/progressBarReducer';
+import { ToastContainer } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 
 
 function App() {
@@ -27,6 +29,7 @@ function App() {
           <Route path='/signup' element={<SignUp />} />
         </Routes>
       </BrowserRouter>
+      <ToastContainer />
     </div>
   );
 }

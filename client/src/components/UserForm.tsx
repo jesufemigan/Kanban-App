@@ -3,6 +3,7 @@ import { GoogleLogin } from 'react-google-login'
 import { gapi } from 'gapi-script'
 import logo from '../assets/logo-mobile.svg'
 import { Link } from "react-router-dom"
+import { toast } from 'react-toastify'
 import { ChangeEvent, FormEvent, useEffect } from "react"
 
 import { useState } from "react"
@@ -11,8 +12,9 @@ import { googleLogin, login, register, reset } from "../features/auth/authSlice"
 import { useNavigate } from "react-router-dom"
 import { setProgress } from "../features/progressBarReducer"
 
+
 const UserForm:React.FC<{name:string,signUp?:boolean}> = ({name, signUp}) => {
-  const { user, isLoading } = useAppSelector(state => state.auth)
+  const { user, isLoading, message, isError } = useAppSelector(state => state.auth)
   const [userData, setUserData] = useState({
     name: '',
     email: '',
@@ -39,8 +41,12 @@ const UserForm:React.FC<{name:string,signUp?:boolean}> = ({name, signUp}) => {
     if (isLoading) {
       dispatch(setProgress())
     }
+
+    if (isError) {
+      toast.error(message)
+    }
     dispatch(reset())
-  }, [user, navigate, dispatch, isLoading])
+  }, [user, navigate, dispatch, isLoading, isError, message])
 
   const clientId = "939999495285-dm64unilovi7uq8ti4pf9p1i1hgd8jqe.apps.googleusercontent.com"
 
